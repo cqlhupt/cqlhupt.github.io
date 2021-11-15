@@ -79,5 +79,5 @@ theme: material-x
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://github.com/cqlhupt/cqlhupt.github.io
+  repo: git@github.com:cqlhupt/cqlhupt.github.io.git
   brabch: master
