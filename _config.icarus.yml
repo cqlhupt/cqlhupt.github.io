@@ -168,6 +168,7 @@ comment:
     owner: cqlhupt
     admin:
         - cqlhupt
+    labels: 'gitalk'
     per_page: 20                    # 可选填
     distraction_free_mode: false    # 可选填
     pager_direction: last           # 可选填
