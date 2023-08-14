@@ -19,7 +19,7 @@ Github是著名的开源，同性交友社区，为广大用户提供了一个�
 
 ### 安装git
 
-__git__是一个版本控制工具，和__github__搭配使用可以实现强大的功能。
+**git**是一个版本控制工具，和**github**搭配使用可以实现强大的功能。
 
 Ubuntu系统：
 ```
@@ -31,9 +31,9 @@ Centos系统：
 ```
 ### 安装Node.js
 
-__Node.js__ 是一个基于Chrome JavaScript 运行时建立的一个平台。
+**Node.js** 是一个基于Chrome JavaScript 运行时建立的一个平台。
 
-__Node.js__是一个事件驱动I/O服务端JavaScript环境，基于Google的V8引擎，V8引擎执行Javascript的速度非常快，性能非常好。
+**Node.js**是一个事件驱动I/O服务端JavaScript环境，基于Google的V8引擎，V8引擎执行Javascript的速度非常快，性能非常好。
 
 Ubuntu系统：
 ```
@@ -87,7 +87,7 @@ Centos系统：
 ```
 然后点击Create repository即可。
 
-回到我们的博客根目录，如果刚才__"hexo s"__命令没有退出请按__"Ctrl+c"__退出
+回到我们的博客根目录，如果刚才**"hexo s"**命令没有退出请按**"Ctrl+c"**退出
 
 编辑hexo配置文件：
 ```
@@ -103,7 +103,7 @@ Centos系统：
 
  branch: master
 ```
-这样修改之后我们就将本地博客和我们的GitHub仓库关联在一起了，接下来的命令可以将我们的本地静态文件（前面：hexo g 生成的静态文件）推到GitHub仓库中，然后我们就可以通过：__https://你的用户名.github.io__ 来访问你的博客了。
+这样修改之后我们就将本地博客和我们的GitHub仓库关联在一起了，接下来的命令可以将我们的本地静态文件（前面：hexo g 生成的静态文件）推到GitHub仓库中，然后我们就可以通过：**https://你的用户名.github.io** 来访问你的博客了。
 
 推送静态文件
 ```
@@ -119,7 +119,7 @@ Centos系统：
 
 ### 科学上网
 
-请使用Firefox浏览器，访问：[https://addons.mozilla.org](https://addons.mozilla.org)，在右上角搜索setup，找到__SetupVPN Lifetime Free VPN__，点击__安装__，然后这个插件将会出现在浏览器右上角，点击插件，然后注册一个免费帐户，然后选择一个节点连接。这里科学上网主要是为了访问下一步中的网站。
+请使用Firefox浏览器，访问：[https://addons.mozilla.org](https://addons.mozilla.org)，在右上角搜索setup，找到**SetupVPN Lifetime Free VPN**，点击**安装**，然后这个插件将会出现在浏览器右上角，点击插件，然后注册一个免费帐户，然后选择一个节点连接。这里科学上网主要是为了访问下一步中的网站。
 
 ### 申请域名
 
@@ -134,11 +134,11 @@ Centos系统：
 
 DNS是域名服务器，其实在网络中计算机使用的还是IP地址，DNS就是专门用来将域名翻译为IP地址的服务器，由于freenom是国外的的网站，所以其DNS在国外，在国内不能解析，所以我们要修改域名的DNS。
 
-前往：[https://www.dnspod.cn](https://www.dnspod.cn/)，注册一个账户或者使用QQ或微信登陆，进入__域名解析-->添加域名__然后将域名写在下面的列表中，点击添加的域名，你将会看见两条记录，不要关闭该页面。
+前往：[https://www.dnspod.cn](https://www.dnspod.cn/)，注册一个账户或者使用QQ或微信登陆，进入**域名解析-->添加域名**然后将域名写在下面的列表中，点击添加的域名，你将会看见两条记录，不要关闭该页面。
 
-在freenom登陆账户后的首页，点击顶部的__Service-->My Domains__，将看见你的域名，点击对应域名的__Manage Domain-->Management Tools-->Nameservers-->Use custom nameservers (enter below)__。下面要求我们填写域名服务器，那么我们的域名服务器在哪呢？
+在freenom登陆账户后的首页，点击顶部的**Service-->My Domains**，将看见你的域名，点击对应域名的**Manage Domain-->Management Tools-->Nameservers-->Use custom nameservers (enter below)**。下面要求我们填写域名服务器，那么我们的域名服务器在哪呢？
 
-返回到DNSPOD页面，分别复制两条记录中的__记录值__项，填到Nameserver1和Nameserver2下面，然后点击__Change Nameservers__即可。
+返回到DNSPOD页面，分别复制两条记录中的**记录值**项，填到Nameserver1和Nameserver2下面，然后点击**Change Nameservers**即可。
 
 这样我们就吧我们域名的DNS服务器改为国内的DNSPOD，在国内我们就可以访问这个域名了，当然还要绑定我们的博客才能访问到博客。这个域名是在国外网站申请的，所以不用在国内进行备案，这样就简单了不少，备案至少需要15天，还不一定能申请下来。
 
@@ -162,17 +162,17 @@ DNS是域名服务器，其实在网络中计算机使用的还是IP地址，DNS
 ```
 ### GitHub网页绑定域名
 
-在浏览器中访问GitHub官网并登录我们注册的账号，然后点击左边的repository中我们为博客建立的那个repository，点击在页面的中部右边的__Setting__，下滑找到__GitHub Pages__项，将你的域名填写在__Custom domain__中并点击__Save__。
+在浏览器中访问GitHub官网并登录我们注册的账号，然后点击左边的repository中我们为博客建立的那个repository，点击在页面的中部右边的**Setting**，下滑找到**GitHub Pages**项，将你的域名填写在**Custom domain**中并点击**Save**。
 
 ### 添加域名解析记录
 
-> * 通过__host__命令查看我们博客部署的IP地址：
+> * 通过**host**命令查看我们博客部署的IP地址：
 > ```
    host 你的用户名.github.io
  ```
-> * 回到DNSPOD __域名解析__ 中点击我们刚才添加的 __域名__
-> * 点击__添加记录__，主机记录选择__“@”__，记录类型选择__“A”__，记录值填刚才host出来的IP地址，TTL设置为__600__（可变），然后保存。
-> * 点击__添加记录__，主机记录选择__“www”__，记录类型选择__“A”__，记录值填刚才host出来的IP地址，TTL设置为__600__（可变），然后保存。
+> * 回到DNSPOD **域名解析** 中点击我们刚才添加的 **域名**
+> * 点击**添加记录**，主机记录选择**“@”**，记录类型选择**“A”**，记录值填刚才host出来的IP地址，TTL设置为**600**（可变），然后保存。
+> * 点击**添加记录**，主机记录选择**“www”**，记录类型选择**“A”**，记录值填刚才host出来的IP地址，TTL设置为**600**（可变），然后保存。
 
 
 

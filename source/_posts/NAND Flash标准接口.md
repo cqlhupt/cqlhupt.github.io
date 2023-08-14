@@ -20,8 +20,8 @@ tags:
 | ALE     | 主控       | 地址锁存使能信号，高电平有效                                                |
 | CLE   | 主控        | 命令锁存使能信号，高电平有效                                         |
 | WE_n/CLK   | 主控        | SDR模式中写数据、命令和地址的边沿信号<br>NVDDR模式中向颗粒输出持续时钟<br>NVDDR2/NVDDR3/NVLPDDR4/Toggle模式中写命令和地址的边沿信号 |
-| RE_n/RE_n_c | 主控        |    SDR模式中读数据边沿信号，用于采样<br>NVDDR模式中指示读写高电平表示写，低电平表示读<br>NVDDR2/NVDDR3/NVLPDDR4/Toggle模式中主控发送给颗粒的读数据的边沿信号<br>__互补信号RE_n_c仅在高速DDR时才开启__ |
-| DQS/DQS_c  | 主控/颗粒   | 用于NVDDR/NVDDR2/NVDDR3/NVLPDDR4/Toggle模式的数据strobe信号<br>写数据时其边沿位于DQ信号窗口的中间，由主控发往颗粒<br>读数据时其边沿与DQ信号变化边沿对齐，由颗粒接收RE_n信号后返回给主控<br>__互补信号DQS_c仅在高速DDR时才开启__  |
+| RE_n/RE_n_c | 主控        |    SDR模式中读数据边沿信号，用于采样<br>NVDDR模式中指示读写高电平表示写，低电平表示读<br>NVDDR2/NVDDR3/NVLPDDR4/Toggle模式中主控发送给颗粒的读数据的边沿信号<br>**互补信号RE_n_c仅在高速DDR时才开启** |
+| DQS/DQS_c  | 主控/颗粒   | 用于NVDDR/NVDDR2/NVDDR3/NVLPDDR4/Toggle模式的数据strobe信号<br>写数据时其边沿位于DQ信号窗口的中间，由主控发往颗粒<br>读数据时其边沿与DQ信号变化边沿对齐，由颗粒接收RE_n信号后返回给主控<br>**互补信号DQS_c仅在高速DDR时才开启**  |
 | DQ[7:0]  | 主控/颗粒        | 数据信号，有8位和16位两种，16位的较为少见，且16位数据线在发送地址和命令时只使用低8位，只有在传输数据时才会使用全部16位数据线        |
 | WP_n  | 主控         | 写保护，低电平有效<br>可复用为ODT控制线，用于主控控制颗粒的ODT使能时间而不是颗粒自动ODT             |
 | Rb_n  | 颗粒         | ready/busy信号，高电平表示ready，低电平表示busy     |
@@ -88,3 +88,32 @@ SDR写数据时，每个上升沿都是与数据相对应的，所以上升沿�
 
 ## 二、~~NVDDDR~~
 此模式为源同步模式，其接口与DDR SDRAM最为接近，包含了一个主控输出的同步时钟给颗粒，但是读写数据时仍需使用DQS信号，由于其相对于两外两种模式的复杂性和电气特性要求（主要是时钟信号、DQ信号、DQS信号的PCB等长布线，源同步时钟带来的功耗、高频干扰问题），目前已经没有颗粒厂商再研发相对应的颗粒，其速率也止步于400MHz DDR。对此模式可以权当了解，无需深入。
+
+### 命令锁存
+![NVDDR命令锁存时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR_cmd_latch.png "NVDDR命令锁存时序")
+### 地址锁存
+![NVDDR地址锁存时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR_addr_latch.png "NVDDR地址锁存时序")
+### 写数据
+![NVDDR写数据时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR_write_data.png "NVDDR写数据时序")
+![NVDDR时钟停止写数据时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR_write_data_clk_stop.png "NVDDR时钟停止写数据时序")
+![NVDDR时钟停止和数据暂停写数据时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR_write_data_clk_stop_and_data_pause.png "NVDDR时钟停止和数据暂停写数据时序")
+
+### 读数据
+![NVDDR读数据时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR_read_data.png "NVDDR读数据时序")
+## 三、NVDDR2/NVDDR3/NVLPDDR4/Toggle
+
+### 命令锁存
+![NVDDR234命令锁存时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR234_cmd_latch.png "NVDDR234命令锁存时序")
+### 地址锁存
+![NVDDR234地址锁存时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR234_addr_latch.png "NVDDR234地址锁存时序")
+### 写数据
+![NVDDR234写数据时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR234_write_data.png "NVDDR234写数据时序")
+### 读数据
+![NVDDR234读数据时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR234_read_data.png "NVDDR234读数据时序")
+### 读写数据暂停（pause/exit）
+![NVDDR234写数据用CE_n暂停时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR234_write_pause_resume.png "NVDDR234写数据用CE_n暂停时序")
+![NVDDR234写数据用CLE暂停时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR234_write_pause_resume1.png "NVDDR234写数据用CLE暂停时序")
+![NVDDR234读数据用CE_n暂停时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR234_read_pause_resume.png "NVDDR234读数据用CE_n暂停时序")
+![NVDDR234读数据用CLE暂停时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR234_read_pause_resume1.png "NVDDR234读数据用CLE暂停时序")
+### ODT（On Die Termination）
+![NVDDR234 ODT匹配示意](../../../hexo/themes/icarus/source/img/onfi/NVDDR234_ODT.png "NVDDR234 ODT匹配示意")
