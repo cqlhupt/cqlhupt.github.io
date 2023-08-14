@@ -28,3 +28,41 @@ tags:
 
 \* 此处的信号均为数字信号，如需了解电源相关模拟信号，请参考具体颗粒手册或ONFi协议
 
+# 时序模式
+## 一、SDR/Legacy
+SDR即Single Data Rate的缩写，在Toggle组织中也有将该模式称为Legacy的。在2006年的NAND市场混乱不堪，各家的接口标准和时序也不一致，当时的颗粒速率比较低，于是ONFi协会成立并发布的第一版ONFi协议。第一版协议中描述了该种工作模式，此工作模式下最高支持50MB/s。
+### 命令锁存
+![SDR命令锁存时序](../../../hexo/themes/icarus/source/img/onfi/SDR_cmd_latch.png "SDR命令锁存时序")
+```
+1. CE_n信号拉低，对要操作的颗粒进行片选
+2. CLE信号拉高，ALE信号保持低
+3. 主控端将命令放在DQ[7:0]上
+4. 主控控制WE_n产生一个边沿
+```
+从时序图中可以看到，时序参数均以WE_n的上升沿为参考，上升沿前的时间为建立时间（setup），上升沿后的时间为保持时间（hold）。只有WE_n拉低的时间为tWP，此参数取决于当前SDR工作的速率，其值为当前工作速率下的半个时钟周期，如工作于25MHz，则tWP应为20ns，数据速率则为25MB/s。
+
+### 地址锁存
+![SDR地址锁存时序](../../../hexo/themes/icarus/source/img/onfi/SDR_addr_latch.png "SDR地址锁存时序")
+```
+1. CE_n信号拉低，对要操作的颗粒进行片选
+2. ALE信号拉高，CLE信号保持低
+3. 主控端将地址放在DQ[7:0]上
+4. 主控控制WE_n产生一个边沿
+```
+可以发现地址锁存时序与命令锁存时序非常相似，此处多出来的tWH参数其实和tWP参数一样，而tWC=tWP+TWH。tWH参数的引入主要是因为每次发送地址时总是含有多个Byte（目前主流的是5~6Byte，特殊操作会有10Byte），tWH描述的是两个Byte地址之间的间隔时间。
+
+### 写数据
+![SDR写数据时序](../../../hexo/themes/icarus/source/img/onfi/SDR_write_data.png "SDR写数据时序")
+```
+1. CE_n信号拉低，对要操作的颗粒进行片选
+2. ALE信号和CLE信号保持低
+3. 主控端将数据连续放在DQ[7:0]上
+4. 主控控制WE_n连续产生与每个数据对应的上升沿
+```
+SDR写数据时，每个上升沿都是与数据相对应的，所以上升沿不能乱给，不然会导致数据顺序出错，在数据读出的时候会出现解码引擎无法完成解码的情况。时序参数增加了tCLH和tCH，规定的是最后一个数据写完之后CE_n和CLE信号需要保持的时间。
+### 读数据
+* 非EDO模式读
+  ![SDR非EDO读数据时序](../../../hexo/themes/icarus/source/img/onfi/SDR_read_data_nonedo.png "SDR非EDO读数据时序")
+  
+* EDO模式读
+  ![SDR EDO读数据时序](../../../hexo/themes/icarus/source/img/onfi/SDR_read_data_edo.png "SDR EDO读数据时序")
