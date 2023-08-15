@@ -188,3 +188,11 @@ Enhanced命令，由颗粒厂商决定，请参考具体颗粒数据手册。
 ![NVDDR234读数据用CLE暂停时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR234_read_pause_resume1.png "NVDDR234读数据用CLE暂停时序")
 ### ODT（On Die Termination）
 ![NVDDR234 ODT匹配示意](../../../hexo/themes/icarus/source/img/onfi/NVDDR234_ODT.png "NVDDR234 ODT匹配示意")
+
+高速信号在阻抗不连续的导体之间会出现信号反射，为了防止反射信号对后续传输的码字产生影响，在颗粒内部引入了片上端接电阻，此电阻可以配置，以适应各种状态下的信号反射。
+
+ODT用于RE_n/RE_n_c、DQS/DQS_c、DQ[7:0]（即颗粒接收的所有高速信号），命令和地址的发送不使用ODT。
+
+ODT分为Self Termination和Matrix Termination，我的理解是前者只使用当前操作的Die内部的端接电阻进行端接，而后者可以使用相同CE_n下其他Die的端接电阻配合当前Die进行端接。Matrix Termination具有更强的灵活性。
+
+ONFi5.0协议上更新了NVLPDDR4接口的电气特性，包括新的端接方式，如上图中描述的NVDDR2/3使用的均为CTT（中心端接），NVLPDDR4则需要使用LTT（低端端接）。
