@@ -33,56 +33,56 @@ tags:
 SDR即Single Data Rate的缩写，在Toggle组织中也有将该模式称为Legacy的。在2006年的NAND市场混乱不堪，各家的接口标准和时序也不一致，当时的颗粒速率比较低，于是ONFi协会成立并发布的第一版ONFi协议。第一版协议中描述了该种工作模式，此工作模式下最高支持50MB/s。
 ### 命令锁存
 ![SDR命令锁存时序](../../../hexo/themes/icarus/source/img/onfi/SDR_cmd_latch.png "SDR命令锁存时序")
-```
-1. CE_n信号拉低，对要操作的颗粒进行片选
-2. CLE信号拉高，ALE信号保持低
-3. 主控端将命令放在DQ[7:0]上
-4. 主控控制WE_n产生一个边沿
-```
+
+>1. CE_n信号拉低，对要操作的颗粒进行片选
+>2. CLE信号拉高，ALE信号保持低
+>3. 主控端将命令放在DQ[7:0]上
+>4. 主控控制WE_n产生一个边沿
+
 从时序图中可以看到，时序参数均以WE_n的上升沿为参考，上升沿前的时间为建立时间（setup），上升沿后的时间为保持时间（hold）。只有WE_n拉低的时间为tWP，此参数取决于当前SDR工作的速率，其值为当前工作速率下的半个时钟周期，如工作于25MHz，则tWP应为20ns，数据速率则为25MB/s。
 
 ### 地址锁存
 ![SDR地址锁存时序](../../../hexo/themes/icarus/source/img/onfi/SDR_addr_latch.png "SDR地址锁存时序")
-```
-1. CE_n信号拉低，对要操作的颗粒进行片选
-2. ALE信号拉高，CLE信号保持低
-3. 主控端将地址放在DQ[7:0]上
-4. 主控控制WE_n产生一个边沿
-```
+
+>1. CE_n信号拉低，对要操作的颗粒进行片选
+>2. ALE信号拉高，CLE信号保持低
+>3. 主控端将地址放在DQ[7:0]上
+>4. 主控控制WE_n产生一个边沿
+
 可以发现地址锁存时序与命令锁存时序非常相似，此处多出来的tWH参数其实和tWP参数一样，而tWC=tWP+TWH。tWH参数的引入主要是因为每次发送地址时总是含有多个Byte（目前主流的是5~6Byte，特殊操作会有10Byte），tWH描述的是两个Byte地址之间的间隔时间。
 
 ### 写数据
 ![SDR写数据时序](../../../hexo/themes/icarus/source/img/onfi/SDR_write_data.png "SDR写数据时序")
-```
-1. CE_n信号拉低，对要操作的颗粒进行片选
-2. ALE信号和CLE信号保持低
-3. 主控端将数据连续放在DQ[7:0]上
-4. 主控控制WE_n连续产生与每个数据对应的上升沿
-```
+
+>1. CE_n信号拉低，对要操作的颗粒进行片选
+>2. ALE信号和CLE信号保持低
+>3. 主控端将数据连续放在DQ[7:0]上
+>4. 主控控制WE_n连续产生与每个数据对应的上升沿
+
 SDR写数据时，每个上升沿都是与数据相对应的，所以上升沿不能乱给，不然会导致数据顺序出错，在数据读出的时候会出现解码引擎无法完成解码的情况。时序参数增加了tCLH和tCH，规定的是最后一个数据写完之后CE_n和CLE信号需要保持的时间。
 ### 读数据
 * 非EDO模式读
   ![SDR非EDO读数据时序](../../../hexo/themes/icarus/source/img/onfi/SDR_read_data_nonedo.png "SDR非EDO读数据时序")
-  ```
-  1. CE_n信号拉低，对要操作的颗粒进行片选
-  2. ALE信号和CLE信号保持低，主控端释放DQ[7:0]数据线（写数据时输出，读数据时输入）
-  3. 主控端拉低RE_n信号
-  4. RE_n下降沿后经过tREA时间后，颗粒将数据放在DQ[7:0]上
-  5. 主控端拉高RE_n信号，并使用上升沿对DQ[7:0]上的数据进行采样
-  6. 重复3~5步，完成所有需要的数据采样
-  ```
+  
+  >1. CE_n信号拉低，对要操作的颗粒进行片选
+  >2. ALE信号和CLE信号保持低，主控端释放DQ[7:0]数据线（写数据时输出，读数据时输入）
+  >3. 主控端拉低RE_n信号
+  >4. RE_n下降沿后经过tREA时间后，颗粒将数据放在DQ[7:0]上
+  >5. 主控端拉高RE_n信号，并使用上升沿对DQ[7:0]上的数据进行采样
+  >6. 重复3~5步，完成所有需要的数据采样
+  
   读数据时参考的时钟边沿是RE_n的上升沿，RE_n的周期（tRC）是工作时钟的周期，tRC=tRP+tREH。另一个重要的参数是tRR，因为在发完读数据命令之后到开始读数据之前，颗粒会处于Busy的状态（颗粒在此期间将数据从浮栅晶体管阵列中读出到缓存），在颗粒Ready之后到RE_n拉低之前的时间需要大于等于tRR。
 
 * EDO模式读
   ![SDR EDO读数据时序](../../../hexo/themes/icarus/source/img/onfi/SDR_read_data_edo.png "SDR EDO读数据时序")
-  ```
-  1. CE_n信号拉低，对要操作的颗粒进行片选
-  2. ALE信号和CLE信号保持低，主控端释放DQ[7:0]数据线（写数据时输出，读数据时输入）
-  3. 主控端拉低RE_n信号
-  4. RE_n下降沿后经过tREA时间后，颗粒将数据放在DQ[7:0]上
-  5. 主控端拉高RE_n信号，并下一个下降沿对DQ[7:0]上的数据进行采样
-  6. 重复3~5步，完成所有需要的数据采样
-  ```
+  
+  >1. CE_n信号拉低，对要操作的颗粒进行片选
+  >2. ALE信号和CLE信号保持低，主控端释放DQ[7:0]数据线（写数据时输出，读数据时输入）
+  >3. 主控端拉低RE_n信号
+  >4. RE_n下降沿后经过tREA时间后，颗粒将数据放在DQ[7:0]上
+  >5. 主控端拉高RE_n信号，并下一个下降沿对DQ[7:0]上的数据进行采样
+  >6. 重复3~5步，完成所有需要的数据采样
+  
   观察时序图可以发现，此时tREA参数似乎长于非EDO的tREA，但是其实tREA参数对应于固定的一颗颗粒是比较一致的，只不过是我们提高了RE_n的速度（tRC变小了），看起来tREA相对变长了。
   这就带来一个问题，颗粒那边的数据输出是由下降沿触发的，采样数据的下降沿比触发数据下降沿晚一个周期，导致最后一个数据没有RE_n的下降沿进行采样。目前我的做法是将RE_n信号整体后延一个周期，再用来采样，也就是说将触发数据的下降沿沿延迟一个周期作为采样数据的下降沿，如果你有更好的方法，烦请与我交流，谢谢。
 
@@ -91,48 +91,82 @@ SDR写数据时，每个上升沿都是与数据相对应的，所以上升沿�
 
 ### 命令锁存
 ![NVDDR命令锁存时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR_cmd_latch.png "NVDDR命令锁存时序")
-```
-1. CE_n信号拉低，对要操作的颗粒进行片选；ALE和CLE也拉低，并且保证三者拉低的时间相对于拉低后的第一个CLK上升沿满足途中tCS和tCALS参数
-2. CLE信号拉高，ALE保持低，命令放在DQ[7:0]上
-3. 确保CLE拉高期间包含一个CLK上升沿，并满足tCALS和tCALH参数
-```
+
+>1. CE_n信号拉低，对要操作的颗粒进行片选；ALE和CLE也拉低，并且保证三者拉低的时间相对于拉低后的第一个CLK上升沿满足途中tCS和tCALS参数
+>2. CLE信号拉高，ALE保持低，命令放在DQ[7:0]上
+>3. 确保CLE拉高期间包含一个CLK上升沿，并满足tCALS和tCALH参数
+
 可以发现，简单的一个命令锁存时序，已经包含相当多的时序参数，并且控制器内部是同步的数字电路，所有在控制过程中会给我们造成一定的麻烦。在控制时可以将CLE和ALE置于默认拉低的状态，让tCALS提前满足，CE_n用于片选，默认保持为高，需要使用时再拉低，tCAD参数则需要计数器。由于CLE中需要包含一个CLK的上升沿，所以CLK可以使用内部电路时钟的反相输出，这样的话内部控制信号变化时就对应CLK的下降沿。
 ### 地址锁存
 ![NVDDR地址锁存时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR_addr_latch.png "NVDDR地址锁存时序")
-```
-1. CE_n信号拉低，对要操作的颗粒进行片选；ALE和CLE也拉低，并且保证三者拉低的时间相对于拉低后的第一个CLK上升沿满足途中tCS和tCALS参数
-2. ALE信号拉高，CLE保持低，命令放在DQ[7:0]上
-3. 确保ALE拉高期间包含一个CLK上升沿，并满足tCALS和tCALH参数
-```
+
+>1. CE_n信号拉低，对要操作的颗粒进行片选；ALE和CLE也拉低，并且保证三者拉低的时间相对于拉低后的第一个CLK上升沿满足途中tCS和tCALS参数
+>2. ALE信号拉高，CLE保持低，命令放在DQ[7:0]上
+>3. 确保ALE拉高期间包含一个CLK上升沿，并满足tCALS和tCALH参数
+
 地址锁存与命令锁存相似，不多赘述。
 ### 写数据
 ![NVDDR写数据时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR_write_data.png "NVDDR写数据时序")
-```
-1. CE_n信号拉低，对要操作的颗粒进行片选；ALE和CLE也拉低，并且保证三者拉低的时间相对于拉低后的第一个CLK上升沿满足途中tCS和tCALS参数
-2. 拉低DQS，保持tWPRE时间
-3. 计数达到tCAD参数之后，ALE和CLE信号拉高，截取需要的CLK脉冲数量
-4. ALE和CLE上升沿之后的第一个CLK上升沿开始计算tDQSS参数，满足后开始将数据放在DQ[7:0]上，并且保证DQS的边沿与数据的中心对齐
-5. 保持DQS拉低tWPST时间
-```
-这里出现了非常奇怪的一个时序，可以观察到的是ALE、CLE有效的时间和DQS、DQ[7:0]的有效时间是错开的，tDQSS时序是0.75~1.25倍的工作时钟周期，ALE和CLE截取的CLK周期
+
+>1. CE_n信号拉低，对要操作的颗粒进行片选；ALE和CLE也拉低，并且保证三者拉低的时间相对于拉低后的第一个CLK上升沿满足途中tCS和tCALS参数
+>2. 拉低DQS，保持tWPRE时间
+>3. 计数达到tCAD参数之后，ALE和CLE信号拉高，截取需要的CLK脉冲数量
+>4. ALE和CLE上升沿之后的第一个CLK上升沿开始计算tDQSS参数，满足后开始将数据放在DQ[7:0]上，并且保证DQS的边沿与数据的中心对齐
+>5. 保持DQS拉低tWPST时间
+
+这里出现了非常奇怪的一个时序，可以观察到的是ALE、CLE有效的时间和DQS、DQ[7:0]的有效时间是错开的，tDQSS时序是0.75~1.25倍的工作时钟周期，ALE和CLE截取的CLK周期应该与DQS输出的周期数量一致。可以看到tDQSS的时间正好落在负四分之一周期和正四分之一周期之间，由于DQS的边沿要和数据DQ[7:0]的中心对齐，所以我们使用DLL器件对截取出来的时钟进行延迟四分之一周期得到DQS，这样tDQSS时间至少会落在1.25倍时钟周期上，如果这个时序相当严格的话，那么非常容易违反。不过，如果延续之前的思路将内部时钟反相之后作为CLK输出，那么这个DQS的起始点可以落在0.75倍时钟周期上，可以满足要求。
 
 ![NVDDR时钟停止写数据时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR_write_data_clk_stop.png "NVDDR时钟停止写数据时序")
+这个时序明显是为了节省功耗而设计的，在ALE和CLE拉高一个周期之后（包含一个CLK上升沿，这个上升沿将会锁存ALE、CLE、W/R_n，所以这三个信号在时钟关闭之后就不关心了），关闭CLK时钟输出。同样的问题依旧存在，当我们重新打开CLK时，数据仍然没有送完，表明除了CLK输出控制发生变化之外其他的信号控制和数量均未发生变化。
 
 ![NVDDR时钟停止和数据暂停写数据时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR_write_data_clk_stop_and_data_pause.png "NVDDR时钟停止和数据暂停写数据时序")
+此时序在上一个时序的基础上提供了一种数据暂停（非退出写数据去执行其他命令）等待的功能，即拉住DQS信号，让它不发生翻转。既然存在这种时序那是否意味着CLK没有停止的写数据时序是不能对DQS和数据进行暂停的。同时tDPZ是1.5倍时钟周期。
 
 ### 读数据
 ![NVDDR读数据时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR_read_data.png "NVDDR读数据时序")
+>1. CE_n信号拉低，对要操作的颗粒进行片选；ALE和CLE也拉低，并且保证三者拉低的时间相对于拉低后的第一个CLK上升沿满足途中tCS和tCALS参数
+>2. 拉低W/R_n信号，满足tCALS时间，保持tWRCK时间
+>3. 计数达到tCAD参数之后，ALE和CLE信号拉高，截取需要的CLK脉冲数量
+>4. DQS和数据从颗粒返回，主控内部对DQS延迟四分之一个周期对数据进行双边沿采样
+这里又存在一个暂停的问题，如果主控内部的数据处理路径上出现了反压，那么是否能都通过拉低ALE、CLE进行流量控制，我倾向于是可以的，如果不能，那么这个时序将会给主控设计带来很大的挑战，因为他要求主控内部存在能够装得下一个Page的Buffer来避免遇到内部数据路径反压导致的数据断流。
+
+总的来说，NVDDR已经成为时代的眼泪。NAND的接口最终还是转向了Toggle的时序。
+
 ## 三、NVDDR2/NVDDR3/NVLPDDR4/Toggle
 
 ### 命令锁存
 ![NVDDR234命令锁存时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR234_cmd_latch.png "NVDDR234命令锁存时序")
+命令的锁存与SDR的锁存时序基本一致，需要注意的点是此处的tWP时间不再是SDR模式下的半个周期，需满足tWP≥11ns，tWH≥11ns，tWC≥25ns。
 ### 地址锁存
 ![NVDDR234地址锁存时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR234_addr_latch.png "NVDDR234地址锁存时序")
+命令和地址的锁存时序基本一致，不赘述。
 ### 写数据
 ![NVDDR234写数据时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR234_write_data.png "NVDDR234写数据时序")
+>1. RE_n、WE_n、DQS保持高，对应差分信号保持低，ALE、CLE保持低
+>2. 拉低CE_n，片选使能颗粒
+>3. 拉低DQS，如果开启了差分，则同时拉高互补信号，保持tWPRE/tWPRE2时间
+>4. 顺序输出数据和DQS，DQS边沿与数据中心对齐，可以通过拉住DQS来进行流量控制
+>5. 数据输出完后，拉低DQS，保持tWPST时间
+>6. 拉高CLE，经过tWPSTH时间后将颗粒的Program指令（如10h，每个颗粒厂商的命令不同）放在DQ上，拉低WE_n
+>7. 经过tWP时间后，拉高WE_n，经过tCDQSH时间后释放DQS及其互补信号
+
+可以看到，这里的时序是比较复杂的，其实我们可以将其拆分成两个部分，第1~5步是写数据，6~7步发Program命令。但是这两个操作不是完全分开的，它们通过DQS保持低联系在一起，因为通常DQS信号是保持高的，因为在写数据的初始状态要求DQS为高，所以主控在结束第一部分写数据操作后会想拉高DQS，这就造成了冲突，所以内部逻辑需要区分当前执行的操作是否在最后结束时能够把DQS给拉高。
+
+这里ONFi和Toggle存在一定的区别，在使用ONFi标准的仿真模型上，确实检测了DQS的拉高时间，但是在Toggle标准的仿真模型上则没有做检查。
 ### 读数据
 ![NVDDR234读数据时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR234_read_data.png "NVDDR234读数据时序")
-### 读写数据暂停（pause/exit）
+>1. RE_n、WE_n、DQS保持高，对应差分信号保持低，ALE、CLE保持低
+>2. 拉低CE_n，片选使能颗粒
+>3. 拉低RE_n，如果开启了差分，则同时拉高互补信号，保持tRPRE/tRPRE2/tRPRE3时间 
+>4. 为了确保颗粒有反应，主控需要在tDQSD时间之后检查DQS是否被颗粒正常拉低*
+>5. 主控开始输出RE_n的脉冲，可以通过拉住RE_n信号进行流控
+>6. 经过tDQSRE时间，颗粒将接收到的RE_n信号作为DQS将数据带出来（DQS边沿与DQ变化沿对齐）
+>7. 数据数量足够之后保持RE_n为低，持续时间为tRPST+tRPSTH，中间的分界是颗粒侧ODT关闭的时刻
+
+\* ONFi中RE_n拉低到DQS拉低的时间是tDQSD，最大值为18ns，Toggle中该时间则是tDQSRE，最大值为25ns。<br>ONFi在读任何数据（read status/get feature/read data）时DQ上的第一个数据都是在DQS的第一个上升沿才出现在总线上的；Toggle只在read data时DQ上的第一个数据是在DQS的第一个上升沿才出现在总线上的，其他的读操作中，DQS拉低的时刻，第一个数据就会出现在DQ上，下一个下降沿DQ上会出现下一个数据，这种操作通常都是repeat twice的（一个DQS周期输出的数据是相同的）。
+### Dummy Toggle/Warmup和读写数据暂停/退出（pause/exit）
+随着颗粒工作频率的增加（400MHz以上，800MB/s以上），信号质量越来越难以得到保障，于是在协议中引入了一些保障信号指令的措施，dummy
+
 ![NVDDR234写数据用CE_n暂停时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR234_write_pause_resume.png "NVDDR234写数据用CE_n暂停时序")
 ![NVDDR234写数据用CLE暂停时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR234_write_pause_resume1.png "NVDDR234写数据用CLE暂停时序")
 ![NVDDR234读数据用CE_n暂停时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR234_read_pause_resume.png "NVDDR234读数据用CE_n暂停时序")
