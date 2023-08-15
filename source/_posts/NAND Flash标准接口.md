@@ -172,9 +172,16 @@ SDR写数据时，每个上升沿都是与数据相对应的，所以上升沿�
 
 写数据时，在输出DQS和数据前，先输出几个DQS周期，数据不用关心；同理在读数据时RE_n输出的前几个dummy周期也不会从颗粒带回正常数据，主控在获取这些无用数据后丢弃即可。
 
-读写的Dummy Toggle是独立开关和配置的，二者可以配置不一样的dummy周期数量，ONFi协议中在800MB/s以上时需要开启该功能
+读写的Dummy Toggle是独立开关和配置的，二者可以配置不一样的dummy周期数量，ONFi协议中要求在800MB/s以上时需要开启该功能
 
 ### 读写数据暂停/退出（pause/exit）
+在正常的数据读写过程中，我们可能会遇到需要中断传输释放IO，处理主控内部信息，调整主控内部状态等。NVDDR234模式下提供了一种退出当前数据传输的方法，就是在数据传输需要中断时，拉高CE_n/ALE/CLE退出传输，重启传输时，将CE_n/ALE/CLE拉低即可。
+
+此退出功能与拉住DQS和RE_n的流控不同，在重启传输时，如果开启了dummy toggle，则需要重新发送额外的RE_n/DQS周期，后者不需要重新发送dummy toggle。
+
+颗粒在800MB/s以上工作时，如果传输退出超过1μs未恢复，则颗粒可以要求重启时主控端需要先发送Change Read Column/Change Read Column 
+Enhanced命令，由颗粒厂商决定，请参考具体颗粒数据手册。
+
 ![NVDDR234写数据用CE_n暂停时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR234_write_pause_resume.png "NVDDR234写数据用CE_n暂停时序")
 ![NVDDR234写数据用CLE暂停时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR234_write_pause_resume1.png "NVDDR234写数据用CLE暂停时序")
 ![NVDDR234读数据用CE_n暂停时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR234_read_pause_resume.png "NVDDR234读数据用CE_n暂停时序")
