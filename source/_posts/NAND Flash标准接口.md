@@ -32,7 +32,7 @@ tags:
 ## 一、SDR/Legacy
 SDR即Single Data Rate的缩写，在Toggle组织中也有将该模式称为Legacy的。在2006年的NAND市场混乱不堪，各家的接口标准和时序也不一致，当时的颗粒速率比较低，于是ONFi协会成立并发布的第一版ONFi协议。第一版协议中描述了该种工作模式，此工作模式下最高支持50MB/s。
 ### 命令锁存
-![SDR命令锁存时序](../../../hexo/themes/icarus/source/img/onfi/SDR_cmd_latch.png "SDR命令锁存时序")
+![SDR命令锁存时序](img/onfi/SDR_cmd_latch.png "SDR命令锁存时序")
 
 >1. CE_n信号拉低，对要操作的颗粒进行片选
 >2. CLE信号拉高，ALE信号保持低
@@ -42,7 +42,7 @@ SDR即Single Data Rate的缩写，在Toggle组织中也有将该模式称为Lega
 从时序图中可以看到，时序参数均以WE_n的上升沿为参考，上升沿前的时间为建立时间（setup），上升沿后的时间为保持时间（hold）。只有WE_n拉低的时间为tWP，此参数取决于当前SDR工作的速率，其值为当前工作速率下的半个时钟周期，如工作于25MHz，则tWP应为20ns，数据速率则为25MB/s。
 
 ### 地址锁存
-![SDR地址锁存时序](../../../hexo/themes/icarus/source/img/onfi/SDR_addr_latch.png "SDR地址锁存时序")
+![SDR地址锁存时序](img/onfi/SDR_addr_latch.png "SDR地址锁存时序")
 
 >1. CE_n信号拉低，对要操作的颗粒进行片选
 >2. ALE信号拉高，CLE信号保持低
@@ -52,7 +52,7 @@ SDR即Single Data Rate的缩写，在Toggle组织中也有将该模式称为Lega
 可以发现地址锁存时序与命令锁存时序非常相似，此处多出来的tWH参数其实和tWP参数一样，而tWC=tWP+TWH。tWH参数的引入主要是因为每次发送地址时总是含有多个Byte（目前主流的是5~6Byte，特殊操作会有10Byte），tWH描述的是两个Byte地址之间的间隔时间。
 
 ### 写数据
-![SDR写数据时序](../../../hexo/themes/icarus/source/img/onfi/SDR_write_data.png "SDR写数据时序")
+![SDR写数据时序](img/onfi/SDR_write_data.png "SDR写数据时序")
 
 >1. CE_n信号拉低，对要操作的颗粒进行片选
 >2. ALE信号和CLE信号保持低
@@ -62,7 +62,7 @@ SDR即Single Data Rate的缩写，在Toggle组织中也有将该模式称为Lega
 SDR写数据时，每个上升沿都是与数据相对应的，所以上升沿不能乱给，不然会导致数据顺序出错，在数据读出的时候会出现解码引擎无法完成解码的情况。时序参数增加了tCLH和tCH，规定的是最后一个数据写完之后CE_n和CLE信号需要保持的时间。
 ### 读数据
 * 非EDO模式读
-  ![SDR非EDO读数据时序](../../../hexo/themes/icarus/source/img/onfi/SDR_read_data_nonedo.png "SDR非EDO读数据时序")
+  ![SDR非EDO读数据时序](img/onfi/SDR_read_data_nonedo.png "SDR非EDO读数据时序")
   
   >1. CE_n信号拉低，对要操作的颗粒进行片选
   >2. ALE信号和CLE信号保持低，主控端释放DQ[7:0]数据线（写数据时输出，读数据时输入）
@@ -74,7 +74,7 @@ SDR写数据时，每个上升沿都是与数据相对应的，所以上升沿�
   读数据时参考的时钟边沿是RE_n的上升沿，RE_n的周期（tRC）是工作时钟的周期，tRC=tRP+tREH。另一个重要的参数是tRR，因为在发完读数据命令之后到开始读数据之前，颗粒会处于Busy的状态（颗粒在此期间将数据从浮栅晶体管阵列中读出到缓存），在颗粒Ready之后到RE_n拉低之前的时间需要大于等于tRR。
 
 * EDO模式读
-  ![SDR EDO读数据时序](../../../hexo/themes/icarus/source/img/onfi/SDR_read_data_edo.png "SDR EDO读数据时序")
+  ![SDR EDO读数据时序](img/onfi/SDR_read_data_edo.png "SDR EDO读数据时序")
   
   >1. CE_n信号拉低，对要操作的颗粒进行片选
   >2. ALE信号和CLE信号保持低，主控端释放DQ[7:0]数据线（写数据时输出，读数据时输入）
@@ -90,7 +90,7 @@ SDR写数据时，每个上升沿都是与数据相对应的，所以上升沿�
 此模式为源同步模式，其接口与DDR SDRAM最为接近，包含了一个主控输出的同步时钟（WE_n/CLK）给颗粒，但是读写数据时仍需使用DQS信号，由于其相对于两外两种模式的复杂性和电气特性要求（主要是时钟信号、DQ信号、DQS信号的PCB等长布线，源同步时钟带来的功耗、高频干扰问题），目前已经没有颗粒厂商再研发相对应的颗粒，其速率也止步于100MHz DDR（200MB/s）。对此模式可以权当了解，无需深入。
 
 ### 命令锁存
-![NVDDR命令锁存时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR_cmd_latch.png "NVDDR命令锁存时序")
+![NVDDR命令锁存时序](img/onfi/NVDDR_cmd_latch.png "NVDDR命令锁存时序")
 
 >1. CE_n信号拉低，对要操作的颗粒进行片选；ALE和CLE也拉低，并且保证三者拉低的时间相对于拉低后的第一个CLK上升沿满足途中tCS和tCALS参数
 >2. CLE信号拉高，ALE保持低，命令放在DQ[7:0]上
@@ -98,7 +98,7 @@ SDR写数据时，每个上升沿都是与数据相对应的，所以上升沿�
 
 可以发现，简单的一个命令锁存时序，已经包含相当多的时序参数，并且控制器内部是同步的数字电路，所有在控制过程中会给我们造成一定的麻烦。在控制时可以将CLE和ALE置于默认拉低的状态，让tCALS提前满足，CE_n用于片选，默认保持为高，需要使用时再拉低，tCAD参数则需要计数器。由于CLE中需要包含一个CLK的上升沿，所以CLK可以使用内部电路时钟的反相输出，这样的话内部控制信号变化时就对应CLK的下降沿。
 ### 地址锁存
-![NVDDR地址锁存时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR_addr_latch.png "NVDDR地址锁存时序")
+![NVDDR地址锁存时序](img/onfi/NVDDR_addr_latch.png "NVDDR地址锁存时序")
 
 >1. CE_n信号拉低，对要操作的颗粒进行片选；ALE和CLE也拉低，并且保证三者拉低的时间相对于拉低后的第一个CLK上升沿满足途中tCS和tCALS参数
 >2. ALE信号拉高，CLE保持低，命令放在DQ[7:0]上
@@ -106,7 +106,7 @@ SDR写数据时，每个上升沿都是与数据相对应的，所以上升沿�
 
 地址锁存与命令锁存相似，不多赘述。
 ### 写数据
-![NVDDR写数据时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR_write_data.png "NVDDR写数据时序")
+![NVDDR写数据时序](img/onfi/NVDDR_write_data.png "NVDDR写数据时序")
 
 >1. CE_n信号拉低，对要操作的颗粒进行片选；ALE和CLE也拉低，并且保证三者拉低的时间相对于拉低后的第一个CLK上升沿满足途中tCS和tCALS参数
 >2. 拉低DQS，保持tWPRE时间
@@ -116,14 +116,14 @@ SDR写数据时，每个上升沿都是与数据相对应的，所以上升沿�
 
 这里出现了非常奇怪的一个时序，可以观察到的是ALE、CLE有效的时间和DQS、DQ[7:0]的有效时间是错开的，tDQSS时序是0.75~1.25倍的工作时钟周期，ALE和CLE截取的CLK周期应该与DQS输出的周期数量一致。可以看到tDQSS的时间正好落在负四分之一周期和正四分之一周期之间，由于DQS的边沿要和数据DQ[7:0]的中心对齐，所以我们使用DLL器件对截取出来的时钟进行延迟四分之一周期得到DQS，这样tDQSS时间至少会落在1.25倍时钟周期上，如果这个时序相当严格的话，那么非常容易违反。不过，如果延续之前的思路将内部时钟反相之后作为CLK输出，那么这个DQS的起始点可以落在0.75倍时钟周期上，可以满足要求。
 
-![NVDDR时钟停止写数据时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR_write_data_clk_stop.png "NVDDR时钟停止写数据时序")
+![NVDDR时钟停止写数据时序](img/onfi/NVDDR_write_data_clk_stop.png "NVDDR时钟停止写数据时序")
 这个时序明显是为了节省功耗而设计的，在ALE和CLE拉高一个周期之后（包含一个CLK上升沿，这个上升沿将会锁存ALE、CLE、W/R_n，所以这三个信号在时钟关闭之后就不关心了），关闭CLK时钟输出。同样的问题依旧存在，当我们重新打开CLK时，数据仍然没有送完，表明除了CLK输出控制发生变化之外其他的信号控制和数量均未发生变化。
 
-![NVDDR时钟停止和数据暂停写数据时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR_write_data_clk_stop_and_data_pause.png "NVDDR时钟停止和数据暂停写数据时序")
+![NVDDR时钟停止和数据暂停写数据时序](img/onfi/NVDDR_write_data_clk_stop_and_data_pause.png "NVDDR时钟停止和数据暂停写数据时序")
 此时序在上一个时序的基础上提供了一种数据暂停（非退出写数据去执行其他命令）等待的功能，即拉住DQS信号，让它不发生翻转。既然存在这种时序那是否意味着CLK没有停止的写数据时序是不能对DQS和数据进行暂停的。同时tDPZ是1.5倍时钟周期。
 
 ### 读数据
-![NVDDR读数据时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR_read_data.png "NVDDR读数据时序")
+![NVDDR读数据时序](img/onfi/NVDDR_read_data.png "NVDDR读数据时序")
 >1. CE_n信号拉低，对要操作的颗粒进行片选；ALE和CLE也拉低，并且保证三者拉低的时间相对于拉低后的第一个CLK上升沿满足途中tCS和tCALS参数
 >2. 拉低W/R_n信号，满足tCALS时间，保持tWRCK时间
 >3. 计数达到tCAD参数之后，ALE和CLE信号拉高，截取需要的CLK脉冲数量
@@ -135,13 +135,13 @@ SDR写数据时，每个上升沿都是与数据相对应的，所以上升沿�
 ## 三、NVDDR2/NVDDR3/NVLPDDR4/Toggle
 
 ### 命令锁存
-![NVDDR234命令锁存时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR234_cmd_latch.png "NVDDR234命令锁存时序")
+![NVDDR234命令锁存时序](img/onfi/NVDDR234_cmd_latch.png "NVDDR234命令锁存时序")
 命令的锁存与SDR的锁存时序基本一致，需要注意的点是此处的tWP时间不再是SDR模式下的半个周期，需满足tWP≥11ns，tWH≥11ns，tWC≥25ns。
 ### 地址锁存
-![NVDDR234地址锁存时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR234_addr_latch.png "NVDDR234地址锁存时序")
+![NVDDR234地址锁存时序](img/onfi/NVDDR234_addr_latch.png "NVDDR234地址锁存时序")
 命令和地址的锁存时序基本一致，不赘述。
 ### 写数据
-![NVDDR234写数据时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR234_write_data.png "NVDDR234写数据时序")
+![NVDDR234写数据时序](img/onfi/NVDDR234_write_data.png "NVDDR234写数据时序")
 >1. RE_n、WE_n、DQS保持高，对应差分信号保持低，ALE、CLE保持低
 >2. 拉低CE_n，片选使能颗粒
 >3. 拉低DQS，如果开启了差分，则同时拉高互补信号，保持tWPRE/tWPRE2时间
@@ -154,7 +154,7 @@ SDR写数据时，每个上升沿都是与数据相对应的，所以上升沿�
 
 这里ONFi和Toggle存在一定的区别，在使用ONFi标准的仿真模型上，确实检测了DQS的拉高时间，但是在Toggle标准的仿真模型上则没有做检查。
 ### 读数据
-![NVDDR234读数据时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR234_read_data.png "NVDDR234读数据时序")
+![NVDDR234读数据时序](img/onfi/NVDDR234_read_data.png "NVDDR234读数据时序")
 >1. RE_n、WE_n、DQS保持高，对应差分信号保持低，ALE、CLE保持低
 >2. 拉低CE_n，片选使能颗粒
 >3. 拉低RE_n，如果开启了差分，则同时拉高互补信号，保持tRPRE/tRPRE2/tRPRE3时间 
@@ -165,7 +165,7 @@ SDR写数据时，每个上升沿都是与数据相对应的，所以上升沿�
 
 \* ONFi中RE_n拉低到DQS拉低的时间是tDQSD，最大值为18ns，Toggle中该时间则是tDQSRE，最大值为25ns。<br>ONFi在读任何数据（read status/get feature/read data）时DQ上的第一个数据都是在DQS的第一个上升沿才出现在总线上的；Toggle只在read data时DQ上的第一个数据是在DQS的第一个上升沿才出现在总线上的，其他的读操作中，DQS拉低的时刻，第一个数据就会出现在DQ上，下一个下降沿DQ上会出现下一个数据，这种操作通常都是repeat twice的（一个DQS周期输出的数据是相同的）。
 ### Dummy Toggle/Warmup
-![read Dummy Toggle/Warmup](../../../hexo/themes/icarus/source/img/onfi/read_dummy_toggle.png "read Dummy Toggle/Warmup")
+![read Dummy Toggle/Warmup](img/onfi/read_dummy_toggle.png "read Dummy Toggle/Warmup")
 随着颗粒工作频率的增加（400MHz以上，800MB/s以上），信号质量越来越难以得到保障，于是在协议中引入了一些保障信号质量的措施。
 
 在读写数据前引入一些额外的RE_n和DQS周期，这些周期不包含有用数据，仅用于信号质量保障，在ONFi上称为warmup，在Toggle上称为dummy toggle。这个功能需要通过设置颗粒的参数来进行开启，默认一般不开启。目前支持的周期数量一般为1，2，4个。
@@ -182,12 +182,12 @@ SDR写数据时，每个上升沿都是与数据相对应的，所以上升沿�
 颗粒在800MB/s以上工作时，如果传输退出超过1μs未恢复，则颗粒可以要求重启时主控端需要先发送Change Read Column/Change Read Column 
 Enhanced命令，由颗粒厂商决定，请参考具体颗粒数据手册。
 
-![NVDDR234写数据用CE_n暂停时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR234_write_pause_resume.png "NVDDR234写数据用CE_n暂停时序")
-![NVDDR234写数据用CLE暂停时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR234_write_pause_resume1.png "NVDDR234写数据用CLE暂停时序")
-![NVDDR234读数据用CE_n暂停时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR234_read_pause_resume.png "NVDDR234读数据用CE_n暂停时序")
-![NVDDR234读数据用CLE暂停时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR234_read_pause_resume1.png "NVDDR234读数据用CLE暂停时序")
+![NVDDR234写数据用CE_n暂停时序](img/onfi/NVDDR234_write_pause_resume.png "NVDDR234写数据用CE_n暂停时序")
+![NVDDR234写数据用CLE暂停时序](img/onfi/NVDDR234_write_pause_resume1.png "NVDDR234写数据用CLE暂停时序")
+![NVDDR234读数据用CE_n暂停时序](img/onfi/NVDDR234_read_pause_resume.png "NVDDR234读数据用CE_n暂停时序")
+![NVDDR234读数据用CLE暂停时序](img/onfi/NVDDR234_read_pause_resume1.png "NVDDR234读数据用CLE暂停时序")
 ### ODT（On Die Termination）
-![NVDDR234 ODT匹配示意](../../../hexo/themes/icarus/source/img/onfi/NVDDR234_ODT.png "NVDDR234 ODT匹配示意")
+![NVDDR234 ODT匹配示意](img/onfi/NVDDR234_ODT.png "NVDDR234 ODT匹配示意")
 
 高速信号在阻抗不连续的导体之间会出现信号反射，为了防止反射信号对后续传输的码字产生影响，在颗粒内部引入了片上端接电阻，此电阻可以配置，以适应各种状态下的信号反射。
 
