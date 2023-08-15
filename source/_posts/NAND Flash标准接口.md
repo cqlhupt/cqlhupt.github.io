@@ -164,9 +164,17 @@ SDR写数据时，每个上升沿都是与数据相对应的，所以上升沿�
 >7. 数据数量足够之后保持RE_n为低，持续时间为tRPST+tRPSTH，中间的分界是颗粒侧ODT关闭的时刻
 
 \* ONFi中RE_n拉低到DQS拉低的时间是tDQSD，最大值为18ns，Toggle中该时间则是tDQSRE，最大值为25ns。<br>ONFi在读任何数据（read status/get feature/read data）时DQ上的第一个数据都是在DQS的第一个上升沿才出现在总线上的；Toggle只在read data时DQ上的第一个数据是在DQS的第一个上升沿才出现在总线上的，其他的读操作中，DQS拉低的时刻，第一个数据就会出现在DQ上，下一个下降沿DQ上会出现下一个数据，这种操作通常都是repeat twice的（一个DQS周期输出的数据是相同的）。
-### Dummy Toggle/Warmup和读写数据暂停/退出（pause/exit）
-随着颗粒工作频率的增加（400MHz以上，800MB/s以上），信号质量越来越难以得到保障，于是在协议中引入了一些保障信号指令的措施，dummy
+### Dummy Toggle/Warmup
+![read Dummy Toggle/Warmup](../../../hexo/themes/icarus/source/img/onfi/read_dummy_toggle.png "read Dummy Toggle/Warmup")
+随着颗粒工作频率的增加（400MHz以上，800MB/s以上），信号质量越来越难以得到保障，于是在协议中引入了一些保障信号质量的措施。
 
+在读写数据前引入一些额外的RE_n和DQS周期，这些周期不包含有用数据，仅用于信号质量保障，在ONFi上称为warmup，在Toggle上称为dummy toggle。这个功能需要通过设置颗粒的参数来进行开启，默认一般不开启。目前支持的周期数量一般为1，2，4个。
+
+写数据时，在输出DQS和数据前，先输出几个DQS周期，数据不用关心；同理在读数据时RE_n输出的前几个dummy周期也不会从颗粒带回正常数据，主控在获取这些无用数据后丢弃即可。
+
+读写的Dummy Toggle是独立开关和配置的，二者可以配置不一样的dummy周期数量，ONFi协议中在800MB/s以上时需要开启该功能
+
+### 读写数据暂停/退出（pause/exit）
 ![NVDDR234写数据用CE_n暂停时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR234_write_pause_resume.png "NVDDR234写数据用CE_n暂停时序")
 ![NVDDR234写数据用CLE暂停时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR234_write_pause_resume1.png "NVDDR234写数据用CLE暂停时序")
 ![NVDDR234读数据用CE_n暂停时序](../../../hexo/themes/icarus/source/img/onfi/NVDDR234_read_pause_resume.png "NVDDR234读数据用CE_n暂停时序")
