@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>APB总线学习 - Hexo</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Jhon Tony"><meta name="msapplication-TileImage" content="/img/xuancailizi.jpg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Jhon Tony"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="这篇文章是APB总线学习的记录，说是记录其实是总线规范的翻译。APB总线是一个非流水线、低带宽、低复杂度的优化接口，用于挂载SoC内部的低速外设，如今广泛应用于各种SoC之中，是AMBA总线家族的一份子。AMBA总线是ARM公司推出的一系列用于搭建以ARM处理器为基础的SoC内部总线，由于如今嵌入式、移动端ARM处理器占比巨大，所以AMBA总线的占比也非常大。不过AMBA总线是公开的标准，不收取任"><meta property="og:type" content="blog"><meta property="og:title" content="APB总线学习"><meta property="og:url" content="https://cqlhupt.github.io/2022/08/10/APB%E5%AD%A6%E4%B9%A0/"><meta property="og:site_name" content="Hexo"><meta property="og:description" content="这篇文章是APB总线学习的记录，说是记录其实是总线规范的翻译。APB总线是一个非流水线、低带宽、低复杂度的优化接口，用于挂载SoC内部的低速外设，如今广泛应用于各种SoC之中，是AMBA总线家族的一份子。AMBA总线是ARM公司推出的一系列用于搭建以ARM处理器为基础的SoC内部总线，由于如今嵌入式、移动端ARM处理器占比巨大，所以AMBA总线的占比也非常大。不过AMBA总线是公开的标准，不收取任"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://cqlhupt.github.io/img/APB/APB%E6%97%A0%E7%AD%89%E5%BE%85%E5%86%99.png"><meta property="og:image" content="https://cqlhupt.github.io/img/APB/APB%E6%9C%89%E7%AD%89%E5%BE%85%E5%86%99.png"><meta property="og:image" content="https://cqlhupt.github.io/img/APB/APB%E6%97%A0%E7%AD%89%E5%BE%85%E8%AF%BB.png"><meta property="og:image" content="https://cqlhupt.github.io/img/APB/APB%E6%9C%89%E7%AD%89%E5%BE%85%E8%AF%BB.png"><meta property="og:image" content="https://cqlhupt.github.io/img/APB/%E5%86%99%E4%BC%A0%E8%BE%93%E9%94%99%E8%AF%AF.png"><meta property="og:image" content="https://cqlhupt.github.io/img/APB/%E8%AF%BB%E4%BC%A0%E8%BE%93%E9%94%99%E8%AF%AF.png"><meta property="og:image" content="https://cqlhupt.github.io/img/APB/%E4%BC%A0%E8%BE%93%E6%93%8D%E4%BD%9C%E7%8A%B6%E6%80%81%E8%BD%AC%E7%A7%BB%E5%9B%BE.png"><meta property="article:published_time" content="2022-08-10T12:52:25.000Z"><meta property="article:modified_time" content="2024-11-01T08:53:28.679Z"><meta property="article:author" content="John Tony"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/img/APB/APB%E6%97%A0%E7%AD%89%E5%BE%85%E5%86%99.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://cqlhupt.github.io/2022/08/10/APB%E5%AD%A6%E4%B9%A0/"},"headline":"APB总线学习","image":["https://cqlhupt.github.io/img/APB/APB%E6%97%A0%E7%AD%89%E5%BE%85%E5%86%99.png","https://cqlhupt.github.io/img/APB/APB%E6%9C%89%E7%AD%89%E5%BE%85%E5%86%99.png","https://cqlhupt.github.io/img/APB/APB%E6%97%A0%E7%AD%89%E5%BE%85%E8%AF%BB.png","https://cqlhupt.github.io/img/APB/APB%E6%9C%89%E7%AD%89%E5%BE%85%E8%AF%BB.png","https://cqlhupt.github.io/img/APB/%E5%86%99%E4%BC%A0%E8%BE%93%E9%94%99%E8%AF%AF.png","https://cqlhupt.github.io/img/APB/%E8%AF%BB%E4%BC%A0%E8%BE%93%E9%94%99%E8%AF%AF.png","https://cqlhupt.github.io/img/APB/%E4%BC%A0%E8%BE%93%E6%93%8D%E4%BD%9C%E7%8A%B6%E6%80%81%E8%BD%AC%E7%A7%BB%E5%9B%BE.png"],"datePublished":"2022-08-10T12:52:25.000Z","dateModified":"2024-11-01T08:53:28.679Z","author":{"@type":"Person","name":"John Tony"},"publisher":{"@type":"Organization","name":"Hexo","logo":{"@type":"ImageObject","url":"https://cqlhupt.github.io/img/logo.svg"}},"description":"这篇文章是APB总线学习的记录，说是记录其实是总线规范的翻译。APB总线是一个非流水线、低带宽、低复杂度的优化接口，用于挂载SoC内部的低速外设，如今广泛应用于各种SoC之中，是AMBA总线家族的一份子。AMBA总线是ARM公司推出的一系列用于搭建以ARM处理器为基础的SoC内部总线，由于如今嵌入式、移动端ARM处理器占比巨大，所以AMBA总线的占比也非常大。不过AMBA总线是公开的标准，不收取任"}</script><link rel="canonical" href="https://cqlhupt.github.io/2022/08/10/APB%E5%AD%A6%E4%B9%A0/"><link rel="icon" href="/img/xuancailizi.jpg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+          Array
+              .from(document.querySelectorAll('.tab-content'))
+              .forEach($tab => {
+                  $tab.classList.add('is-hidden');
+              });
+          Array
+              .from(document.querySelectorAll('.tabs li'))
+              .forEach($tab => {
+                  $tab.classList.remove('is-active');
+              });
+          const $activeTab = document.querySelector(location.hash);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+          const $tabMenu = document.querySelector(`a[href="${location.hash}"]`);
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.svg" alt="Hexo" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2022-08-10T12:52:25.000Z" title="2022/8/10 20:52:25">2022-08-10</time>发表</span><span class="level-item"><time dateTime="2024-11-01T08:53:28.679Z" title="2024/11/1 16:53:28">2024-11-01</time>更新</span><span class="level-item">11 分钟读完 (大约1581个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">APB总线学习</h1><div class="content"><p>这篇文章是APB总线学习的记录，说是记录其实是总线规范的翻译。APB总线是一个非流水线、低带宽、低复杂度的优化接口，用于挂载SoC内部的低速外设，如今广泛应用于各种SoC之中，是AMBA总线家族的一份子。AMBA总线是ARM公司推出的一系列用于搭建以ARM处理器为基础的SoC内部总线，由于如今嵌入式、移动端ARM处理器占比巨大，所以AMBA总线的占比也非常大。不过AMBA总线是公开的标准，不收取任何授权费用，所以也得到业内的广泛认可。</p>
+<span id="more"></span>
+
+<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><ul>
+<li>一个低功耗、低复杂度的改良接口</li>
+<li>低带宽、非流水线接口，不要求设备具有流水线接口</li>
+<li>所有信号的变化都在上升沿，便于集成，每次传输至少两个周期</li>
+<li>可配合AHB、AXI使用，可用于配置外设（好像系统中的设备都是通过APB配置，而不会用AXI、AHB配置？）</li>
+</ul>
+<h1 id="信号定义"><a href="#信号定义" class="headerlink" title="信号定义"></a>信号定义</h1><table>
+<thead>
+<tr>
+<th>名称</th>
+<th>来源</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PCLK</td>
+<td>时钟源</td>
+<td>时钟，上升沿用于APB的所有传输</td>
+</tr>
+<tr>
+<td>PRESETn</td>
+<td>系统总线复位</td>
+<td>复位，低电平有效，通常直接接到系统总线复位信号</td>
+</tr>
+<tr>
+<td>PADDR</td>
+<td>APB桥</td>
+<td>地址，APB地址总线，最多可以达到32位，由外设总线桥驱动</td>
+</tr>
+<tr>
+<td>PSELx</td>
+<td>APB桥</td>
+<td>选择，APB桥生成该信号用于不同的从机，当传输到来时表示从机的选中，每个从机都有一个，且互相排斥</td>
+</tr>
+<tr>
+<td>PENABLE</td>
+<td>APB桥</td>
+<td>使能，用于指示APB传输的第二个周期</td>
+</tr>
+<tr>
+<td>PWRITE</td>
+<td>APB桥</td>
+<td>方向，高表示写，低表示读</td>
+</tr>
+<tr>
+<td>PWDATA</td>
+<td>APB桥</td>
+<td>写数据，由APB桥在PWRITE信号为高时驱动，可以达到32位</td>
+</tr>
+<tr>
+<td>PREADY</td>
+<td>从机</td>
+<td>就绪，从机用来扩展传输周期</td>
+</tr>
+<tr>
+<td>PRDATA</td>
+<td>从机</td>
+<td>读数据，由APB桥在PWRITE信号为低时驱动，可以达到32位</td>
+</tr>
+<tr>
+<td>PSLVERR</td>
+<td>从机</td>
+<td>表示传输失败，不是必要信号，当从机没有时，主机的该信号接地</td>
+</tr>
+</tbody></table>
+<h1 id="写传输"><a href="#写传输" class="headerlink" title="写传输"></a>写传输</h1><h2 id="一、没有等待的写"><a href="#一、没有等待的写" class="headerlink" title="一、没有等待的写"></a>一、没有等待的写</h2><p><img src="/img/APB/APB%E6%97%A0%E7%AD%89%E5%BE%85%E5%86%99.png" alt="无等待写" title="无等待写"></p>
+<p>传输由地址、写信号（拉高表示写）、片选信号、数据同时改变的时钟上升沿开始，该阶段称为建立阶段。下一个时钟沿使能信号生效，表示进入访问阶段。地址、写信号、片选信号、数据要保持到访问阶段结束。访问阶段结束意味着传输完成。<br>使能信号在访问阶段结束时失效。片选信号也应当拉低，除非接下来的传输依然是给相同的外设。</p>
+<h2 id="二、有等待的写"><a href="#二、有等待的写" class="headerlink" title="二、有等待的写"></a>二、有等待的写</h2><p><img src="/img/APB/APB%E6%9C%89%E7%AD%89%E5%BE%85%E5%86%99.png" alt="有等待写" title="有等待写"><br>唯一的区别在于，当使能信号拉高后，外设通过拉低就绪（PREADY）信号扩展了访问阶段，延迟了传输的周期。在就绪信号为低时，所有的其他信号要保持不变。</p>
+<p><strong>当一次传输结束时推荐不要改变地址和写信号，保持到下一次传输到来时，这样可以降低（开关）功耗。</strong></p>
+<h1 id="读传输"><a href="#读传输" class="headerlink" title="读传输"></a>读传输</h1><h2 id="一、无等待的读"><a href="#一、无等待的读" class="headerlink" title="一、无等待的读"></a>一、无等待的读</h2><p><img src="/img/APB/APB%E6%97%A0%E7%AD%89%E5%BE%85%E8%AF%BB.png" alt="无等待读" title="无等待读"></p>
+<p>主机将地址放在地址线上，将写信号拉低表示读、拉高片选信号，过一个周期之后拉高使能信号，同时从机将数据放在PRDATA线上并拉高PREADY表示数据就绪。</p>
+<h2 id="二、有等待的读"><a href="#二、有等待的读" class="headerlink" title="二、有等待的读"></a>二、有等待的读</h2><p><img src="/img/APB/APB%E6%9C%89%E7%AD%89%E5%BE%85%E8%AF%BB.png" alt="有等待的读" title="有等待的读"><br>同样，如果从机未准备好，那么可以拉低PREADY表示未就绪，使主机保持现有的信号直到从机就绪。</p>
+<h1 id="错误响应"><a href="#错误响应" class="headerlink" title="错误响应"></a>错误响应</h1><p>可以使用PSLVERR信号表示传输中的错误状况，读写都可以使用。</p>
+<p>PSLVERR只在传输的最后阶段（PSEL, PENABLE, PREADY都为高）时才被考虑生效。</p>
+<p>推荐（非强制）在传输的最后阶段前PSLVERR都保持低状态。</p>
+<p>传输收到错误时，改不改变外设的状态取决于从机，且改不改变都是可以被协议接受的。写传输中出现错误不代表数据没被写进外设，读传输出错时可以返回不可用的数据，没有要求必须返回全0.</p>
+<p>对于已存在或者新的APB外设都没有强制要求支持PSLVERR信号。当从机没有该信号时，APB桥（主机）的该引脚接到地即可。</p>
+<p><img src="/img/APB/%E5%86%99%E4%BC%A0%E8%BE%93%E9%94%99%E8%AF%AF.png" alt="写传输错误" title="写传输错误"></p>
+<p><img src="/img/APB/%E8%AF%BB%E4%BC%A0%E8%BE%93%E9%94%99%E8%AF%AF.png" alt="读传输错误" title="读传输错误"></p>
+<h2 id="错误向上映射"><a href="#错误向上映射" class="headerlink" title="错误向上映射"></a>错误向上映射</h2><ul>
+<li>AXI2APB：APB错误映射为<strong>RRESP&#x2F;BRESP&#x3D;SLVERR</strong>，即将PSLVERR信号映射为RRESP[1]（读）和BRESP[1]（写）</li>
+<li>AHB2APB：APB错误映射为<strong>HRESP&#x3D;ERROR</strong>，即将PSLVERR信号映射为HRESP[0]（读或写）</li>
+</ul>
+<h1 id="传输操作状态"><a href="#传输操作状态" class="headerlink" title="传输操作状态"></a>传输操作状态</h1><p><img src="/img/APB/%E4%BC%A0%E8%BE%93%E6%93%8D%E4%BD%9C%E7%8A%B6%E6%80%81%E8%BD%AC%E7%A7%BB%E5%9B%BE.png" alt="传输操作状态转移图" title="传输操作状态转移图"></p>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>IDLE</td>
+<td>空闲状态</td>
+</tr>
+<tr>
+<td>SETUP</td>
+<td>当选择信号PSELx生效时，总线进入SETUP状态。总线只在该状态一个周期，下一个始终沿到来时进入ACCESS状态</td>
+</tr>
+<tr>
+<td>ACCESS</td>
+<td>使能信号PENABLE在该状态拉高，其他信号在SETUP变为ACCESS时必须保持稳定。ACCESS状态的退出收到从机的PREADY控制。当PREADY拉低时保持在ACCESS，当PREADY拉高后如果没有紧接着的传输就进入IDLE，否则直接进入SETUP开始下一次传输</td>
+</tr>
+</tbody></table>
+</div><div class="article-licensing box"><div class="licensing-title"><p>APB总线学习</p><p><a href="https://cqlhupt.github.io/2022/08/10/APB学习/">https://cqlhupt.github.io/2022/08/10/APB学习/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>John Tony</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2022-08-10</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-11-01</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><!--!--></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3><div class="buttons is-centered"><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>支付宝</span><span class="qrcode"><img src="/img/alipay.jpg" alt="支付宝"></span></a><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>微信</span><span class="qrcode"><img src="/img/wechatpay.png" alt="微信"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2023/08/12/NAND%20Flash%E6%A0%87%E5%87%86%E6%8E%A5%E5%8F%A3/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">NAND Flash标准接口</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2022/05/12/Hexo%E6%90%AD%E5%BB%BA/"><span class="level-item">Hexo搭建</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">评论</h3><div id="comment-container"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script><script>var gitalk = new Gitalk({
+            id: "b85269ff8cb5948beef1ea6ba5488707",
+            repo: "cqlhupt.github.io",
+            owner: "cqlhupt",
+            clientID: "023626b20535f2a6e187",
+            clientSecret: "62c520f8a6d627ff0abeee372f525caad57e12eb",
+            admin: ["cqlhupt"],
+            createIssueManually: false,
+            distractionFreeMode: false,
+            perPage: 20,
+            pagerDirection: "last",
+            
+            
+            enableHotKey: true,
+            language: "zh-CN",
+        })
+        gitalk.render('comment-container')</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="/img/xuancailizi.jpg" alt="Jhon Tony"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">Jhon Tony</p><p class="is-size-6 is-block">Jhon Tony&#039;s Blog</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>Galaxy, Universe</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">5</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">0</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">0</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/cqlhupt" target="_blank" rel="noopener">关注我</a></div><div class="level is-mobile is-multiline"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/cqlhupt"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Facebook" href="https://facebook.com"><i class="fab fa-facebook"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Twitter" href="https://twitter.com"><i class="fab fa-twitter"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Dribbble" href="https://dribbble.com"><i class="fab fa-dribbble"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="RSS" href="/"><i class="fas fa-rss"></i></a></div></div></div><!--!--><div class="card widget" data-type="links"><div class="card-content"><div class="menu"><h3 class="menu-label">链接</h3><ul class="menu-list"><li><a class="level is-mobile" href="https://hexo.io" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">Hexo</span></span><span class="level-right"><span class="level-item tag">hexo.io</span></span></a></li><li><a class="level is-mobile" href="https://bulma.io" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">Bulma</span></span><span class="level-right"><span class="level-item tag">bulma.io</span></span></a></li></ul></div></div></div><!--!--><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2024-11-01T09:40:56.000Z">2024-11-01</time></p><p class="title"><a href="/2024/11/01/ESP-IDF-environment-setup/">ESP-IDF环境搭建</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2023-08-12T12:52:25.000Z">2023-08-12</time></p><p class="title"><a href="/2023/08/12/NAND%20Flash%E6%A0%87%E5%87%86%E6%8E%A5%E5%8F%A3/">NAND Flash标准接口</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2022-08-10T12:52:25.000Z">2022-08-10</time></p><p class="title"><a href="/2022/08/10/APB%E5%AD%A6%E4%B9%A0/">APB总线学习</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2022-05-12T12:52:25.000Z">2022-05-12</time></p><p class="title"><a href="/2022/05/12/Hexo%E6%90%AD%E5%BB%BA/">Hexo搭建</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2022-04-12T12:52:25.000Z">2022-04-12</time></p><p class="title"><a href="/2022/04/12/hello-world/">Hello World</a></p></div></article></div></div><div class="card widget" data-type="archives"><div class="card-content"><div class="menu"><h3 class="menu-label">归档</h3><ul class="menu-list"><li><a class="level is-mobile" href="/archives/2024/11/"><span class="level-start"><span class="level-item">十一月 2024</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2023/08/"><span class="level-start"><span class="level-item">八月 2023</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2022/08/"><span class="level-start"><span class="level-item">八月 2022</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2022/05/"><span class="level-start"><span class="level-item">五月 2022</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2022/04/"><span class="level-start"><span class="level-item">四月 2022</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></div></div></div><!--!--><div class="card widget" data-type="subscribe-email"><div class="card-content"><div class="menu"><h3 class="menu-label">订阅更新</h3><form action="https://feedburner.google.com/fb/a/mailverify" method="post" target="popupwindow" onsubmit="window.open(&#039;https://feedburner.google.com/fb/a/mailverify?uri=&#039;,&#039;popupwindow&#039;,&#039;scrollbars=yes,width=550,height=520&#039;);return true"><input type="hidden" value="" name="uri"><input type="hidden" name="loc" value="en_US"><div class="field has-addons"><div class="control has-icons-left is-expanded"><input class="input" name="email" type="email" placeholder="Email"><span class="icon is-small is-left"><i class="fas fa-envelope"></i></span></div><div class="control"><input class="button" type="submit" value="订阅"></div></div></form></div></div></div><div class="card widget" data-type="subscribe-email"><div class="card-content"><div class="menu"><h3 class="menu-label">follow.it</h3><form action="" method="post" target="_blank"><div class="field has-addons"><div class="control has-icons-left is-expanded"><input class="input" name="email" type="email" placeholder="Email"><span class="icon is-small is-left"><i class="fas fa-envelope"></i></span></div><div class="control"><input class="button" type="submit" value="订阅"></div></div></form></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.svg" alt="Hexo" height="28"></a><p class="is-size-7"><span>&copy; 2024 John Tony</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-CN");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>Hexo搭建 - Hexo</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Jhon Tony"><meta name="msapplication-TileImage" content="/img/xuancailizi.jpg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Jhon Tony"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="经过一段时间的修复，现在我的博客恢复了。博客在几年前搭建好后，就一直处于吃灰状态，一直也没有更新过，不知道有没有人闯入过这里。这段时间准备重拾博客，发现原来的主题停止维护了，于是就换了一个，然后重新部署，虽然以前做了迁移准备，但还是折腾了几天，原因是迁移准备中的Hexo配置文件过时了，详情留待下次讲解吧。这篇文章是一篇Hexo搭建教程。"><meta property="og:type" content="blog"><meta property="og:title" content="Hexo搭建"><meta property="og:url" content="https://cqlhupt.github.io/2022/05/12/Hexo%E6%90%AD%E5%BB%BA/"><meta property="og:site_name" content="Hexo"><meta property="og:description" content="经过一段时间的修复，现在我的博客恢复了。博客在几年前搭建好后，就一直处于吃灰状态，一直也没有更新过，不知道有没有人闯入过这里。这段时间准备重拾博客，发现原来的主题停止维护了，于是就换了一个，然后重新部署，虽然以前做了迁移准备，但还是折腾了几天，原因是迁移准备中的Hexo配置文件过时了，详情留待下次讲解吧。这篇文章是一篇Hexo搭建教程。"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://cqlhupt.github.io/img/og_image.png"><meta property="article:published_time" content="2022-05-12T12:52:25.000Z"><meta property="article:modified_time" content="2024-11-01T08:53:28.689Z"><meta property="article:author" content="John Tony"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://cqlhupt.github.io/2022/05/12/Hexo%E6%90%AD%E5%BB%BA/"},"headline":"Hexo搭建","image":["https://cqlhupt.github.io/img/og_image.png"],"datePublished":"2022-05-12T12:52:25.000Z","dateModified":"2024-11-01T08:53:28.689Z","author":{"@type":"Person","name":"John Tony"},"publisher":{"@type":"Organization","name":"Hexo","logo":{"@type":"ImageObject","url":"https://cqlhupt.github.io/img/logo.svg"}},"description":"经过一段时间的修复，现在我的博客恢复了。博客在几年前搭建好后，就一直处于吃灰状态，一直也没有更新过，不知道有没有人闯入过这里。这段时间准备重拾博客，发现原来的主题停止维护了，于是就换了一个，然后重新部署，虽然以前做了迁移准备，但还是折腾了几天，原因是迁移准备中的Hexo配置文件过时了，详情留待下次讲解吧。这篇文章是一篇Hexo搭建教程。"}</script><link rel="canonical" href="https://cqlhupt.github.io/2022/05/12/Hexo%E6%90%AD%E5%BB%BA/"><link rel="icon" href="/img/xuancailizi.jpg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+          Array
+              .from(document.querySelectorAll('.tab-content'))
+              .forEach($tab => {
+                  $tab.classList.add('is-hidden');
+              });
+          Array
+              .from(document.querySelectorAll('.tabs li'))
+              .forEach($tab => {
+                  $tab.classList.remove('is-active');
+              });
+          const $activeTab = document.querySelector(location.hash);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+          const $tabMenu = document.querySelector(`a[href="${location.hash}"]`);
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.svg" alt="Hexo" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2022-05-12T12:52:25.000Z" title="2022/5/12 20:52:25">2022-05-12</time>发表</span><span class="level-item"><time dateTime="2024-11-01T08:53:28.689Z" title="2024/11/1 16:53:28">2024-11-01</time>更新</span><span class="level-item">15 分钟读完 (大约2181个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">Hexo搭建</h1><div class="content"><p>经过一段时间的修复，现在我的博客恢复了。博客在几年前搭建好后，就一直处于吃灰状态，一直也没有更新过，不知道有没有人闯入过这里。这段时间准备重拾博客，发现原来的主题停止维护了，于是就换了一个，然后重新部署，虽然以前做了迁移准备，但还是折腾了几天，原因是迁移准备中的Hexo配置文件过时了，详情留待下次讲解吧。这篇文章是一篇Hexo搭建教程。</p>
+<span id="more"></span>
+
+<h3 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h3><blockquote>
+<ul>
+<li>git</li>
+<li>Node.js</li>
+<li>hexo</li>
+</ul>
+</blockquote>
+<p>Github是著名的开源，同性交友社区，为广大用户提供了一个网上代码、博客托管空间，大约有300M空间，当然我们需要先在<a target="_blank" rel="noopener" href="https://github.com/">GitHub官网</a>注册一个账户，在官网上就可以注册。当你注册好了，就可以开始搭建属于你自己的Hexo博客了。</p>
+<h3 id="安装git"><a href="#安装git" class="headerlink" title="安装git"></a>安装git</h3><p><strong>git</strong>是一个版本控制工具，和<strong>github</strong>搭配使用可以实现强大的功能。</p>
+<p>Ubuntu系统：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install git -y</span><br></pre></td></tr></table></figure>
+<p>Centos系统：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install git -y</span><br></pre></td></tr></table></figure>
+<h3 id="安装Node-js"><a href="#安装Node-js" class="headerlink" title="安装Node.js"></a>安装Node.js</h3><p><strong>Node.js</strong> 是一个基于Chrome JavaScript 运行时建立的一个平台。</p>
+<p><strong>Node.js</strong>是一个事件驱动I&#x2F;O服务端JavaScript环境，基于Google的V8引擎，V8引擎执行Javascript的速度非常快，性能非常好。</p>
+<p>Ubuntu系统：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install nodejs -y</span><br></pre></td></tr></table></figure>
+<p>Centos系统：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install nodejs -y</span><br></pre></td></tr></table></figure>
+<h3 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h3><p>首先新建并进入一个文件夹：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir 文件夹名</span><br><span class="line"></span><br><span class="line">cd 文件夹名</span><br></pre></td></tr></table></figure>
+<p>安装Hexo：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+<p>安装主题</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo npm install hexo-theme-icarus</span><br></pre></td></tr></table></figure>
+<p>初次使用时需要初始化Hexo：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo init</span><br></pre></td></tr></table></figure>
+<p>到这里，我们的博客本地基本上就搭建完毕了，你新建的文件夹就是博客的根目录，这个文件夹非常重要。</p>
+<p>现在我们去看看我们的博客页面:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo g                          //生成静态页面</span><br><span class="line"></span><br><span class="line">hexo s                          //启动本地服务，进行文章预览调试</span><br></pre></td></tr></table></figure>
+<p>这两个命令以后会比较常用，执行完后，不会结束，会提示你到：<a target="_blank" rel="noopener" href="http://localhost:4000/">http://localhost:4000</a> 查看你的博客页面</p>
+<h2 id="配置Github"><a href="#配置Github" class="headerlink" title="配置Github"></a>配置Github</h2><p>刚才我们在GitHub上注册的账户现在派上用场了，我们开始吧。</p>
+<h3 id="建立Repository"><a href="#建立Repository" class="headerlink" title="建立Repository"></a>建立Repository</h3><p>进入<a target="_blank" rel="noopener" href="https://github.com/">Github官网</a>登陆你的账户，点击右上角“+”号，选择New repository，第一项是仓库名，这个仓库将用于托管我们的博客静态页面，所以命名有讲究：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">你的用户名.github.io</span><br></pre></td></tr></table></figure>
+<p>然后点击Create repository即可。</p>
+<p>回到我们的博客根目录，如果刚才**”hexo s”<strong>命令没有退出请按</strong>“Ctrl+c”**退出</p>
+<p>编辑hexo配置文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vim _config.yml</span><br></pre></td></tr></table></figure>
+<p>当然你也可以用其他的编辑器打开这个文件，修改文件的最后部分成如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line"></span><br><span class="line">type: git</span><br><span class="line"></span><br><span class="line">repo: https://github.com/你的用户名/你的用户名.github.io.git</span><br><span class="line"></span><br><span class="line">branch: master</span><br></pre></td></tr></table></figure>
+<p>这样修改之后我们就将本地博客和我们的GitHub仓库关联在一起了，接下来的命令可以将我们的本地静态文件（前面：hexo g 生成的静态文件）推到GitHub仓库中，然后我们就可以通过：<strong>https:&#x2F;&#x2F;你的用户名.github.io</strong> 来访问你的博客了。</p>
+<p>推送静态文件</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo d</span><br></pre></td></tr></table></figure>
+<p>到此我们的博客就部署完毕了，关于其他的像主题、头像什么的，这里就先不说了。不过我想说一说域名的绑定。</p>
+<h2 id="域名的绑定"><a href="#域名的绑定" class="headerlink" title="域名的绑定"></a>域名的绑定</h2><p>域名是为了帮助解决人们对于IP地址的记忆难题的一套机制，如<a target="_blank" rel="noopener" href="https://www.baidu.com/">www.baidu.com</a>，<a target="_blank" rel="noopener" href="https://www.alibaba.com/">www.alibaba.com</a>，<a target="_blank" rel="noopener" href="http://www.cqlh.ml/">www.cqlh.ml</a>都是域名，而IP地址是一串点分十进制数，如14.255.177.39，106.11.223.101，185.199.108.153等，显然前面两者更好记忆，我们可以给我们的博客绑定一个属于我们自己的域名，方便大家访问。</p>
+<p>域名也是一种互联网资源，通常域名都是需要购买的，而且国内的域名大部分都是要备案的，而备案就需要有服务器，而且必须要使用期有三个月的服务器才可以用来申请备案，所以作为学生，我们就要想尽办法白嫖啊。</p>
+<h3 id="科学上网"><a href="#科学上网" class="headerlink" title="科学上网"></a>科学上网</h3><p>请使用Firefox浏览器，访问：<a target="_blank" rel="noopener" href="https://addons.mozilla.org/">https://addons.mozilla.org</a>，在右上角搜索setup，找到<strong>SetupVPN Lifetime Free VPN</strong>，点击<strong>安装</strong>，然后这个插件将会出现在浏览器右上角，点击插件，然后注册一个免费帐户，然后选择一个节点连接。这里科学上网主要是为了访问下一步中的网站。</p>
+<h3 id="申请域名"><a href="#申请域名" class="headerlink" title="申请域名"></a>申请域名</h3><p>前往：<a target="_blank" rel="noopener" href="https://www.freenom.com/zh/index.html?lang=zh">www.freenom.com</a> </p>
+<ul>
+<li>注册一个账户用来申请免费域名</li>
+<li>在首页检测自己想要的域名，由于是买免费的，所以后缀名可能不太常见，当然这个网站也出售收费域名</li>
+</ul>
+<p>免费域名的期限是一年，在域名到期前15天可申请免费续订，如果要继续使用需要进行续订</p>
+<h3 id="将DNS设置到国内"><a href="#将DNS设置到国内" class="headerlink" title="将DNS设置到国内"></a>将DNS设置到国内</h3><p>DNS是域名服务器，其实在网络中计算机使用的还是IP地址，DNS就是专门用来将域名翻译为IP地址的服务器，由于freenom是国外的的网站，所以其DNS在国外，在国内不能解析，所以我们要修改域名的DNS。</p>
+<p>前往：<a target="_blank" rel="noopener" href="https://www.dnspod.cn/">https://www.dnspod.cn</a>，注册一个账户或者使用QQ或微信登陆，进入<strong>域名解析–&gt;添加域名</strong>然后将域名写在下面的列表中，点击添加的域名，你将会看见两条记录，不要关闭该页面。</p>
+<p>在freenom登陆账户后的首页，点击顶部的<strong>Service–&gt;My Domains</strong>，将看见你的域名，点击对应域名的**Manage Domain–&gt;Management Tools–&gt;Nameservers–&gt;Use custom nameservers (enter below)**。下面要求我们填写域名服务器，那么我们的域名服务器在哪呢？</p>
+<p>返回到DNSPOD页面，分别复制两条记录中的<strong>记录值</strong>项，填到Nameserver1和Nameserver2下面，然后点击<strong>Change Nameservers</strong>即可。</p>
+<p>这样我们就吧我们域名的DNS服务器改为国内的DNSPOD，在国内我们就可以访问这个域名了，当然还要绑定我们的博客才能访问到博客。这个域名是在国外网站申请的，所以不用在国内进行备案，这样就简单了不少，备案至少需要15天，还不一定能申请下来。</p>
+<h3 id="创建CNAME文件"><a href="#创建CNAME文件" class="headerlink" title="创建CNAME文件"></a>创建CNAME文件</h3><p>回到博客根目录，进入source文件夹：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cd source/</span><br></pre></td></tr></table></figure>
+<p>创建CNAME文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">touch CNAME</span><br></pre></td></tr></table></figure>
+<p>将域名写到CNAME文件中，写的时候记得写域名前面的www</p>
+<p>生成静态文件并推上GitHub：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo g</span><br><span class="line"></span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure>
+<h3 id="GitHub网页绑定域名"><a href="#GitHub网页绑定域名" class="headerlink" title="GitHub网页绑定域名"></a>GitHub网页绑定域名</h3><p>在浏览器中访问GitHub官网并登录我们注册的账号，然后点击左边的repository中我们为博客建立的那个repository，点击在页面的中部右边的<strong>Setting</strong>，下滑找到<strong>GitHub Pages</strong>项，将你的域名填写在<strong>Custom domain</strong>中并点击<strong>Save</strong>。</p>
+<h3 id="添加域名解析记录"><a href="#添加域名解析记录" class="headerlink" title="添加域名解析记录"></a>添加域名解析记录</h3><blockquote>
+<ul>
+<li>通过<strong>host</strong>命令查看我们博客部署的IP地址：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">host 你的用户名.github.io</span><br></pre></td></tr></table></figure></li>
+<li>回到DNSPOD <strong>域名解析</strong> 中点击我们刚才添加的 <strong>域名</strong></li>
+<li>点击<strong>添加记录</strong>，主机记录选择<strong>“@”</strong>，记录类型选择<strong>“A”</strong>，记录值填刚才host出来的IP地址，TTL设置为<strong>600</strong>（可变），然后保存。</li>
+<li>点击<strong>添加记录</strong>，主机记录选择<strong>“www”</strong>，记录类型选择<strong>“A”</strong>，记录值填刚才host出来的IP地址，TTL设置为<strong>600</strong>（可变），然后保存。</li>
+</ul>
+</blockquote>
+<p>到此，我们搭建好我们的博客，推上了GitHub并绑定了我们自己的域名。Hexo博客需要使用Markdown编写，不过Markdown语法比较少，也比较简单，可以参考：<a target="_blank" rel="noopener" href="https://www.runoob.com/markdown/md-tutorial.html">Markdown教程</a></p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>Hexo搭建</p><p><a href="https://cqlhupt.github.io/2022/05/12/Hexo搭建/">https://cqlhupt.github.io/2022/05/12/Hexo搭建/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>John Tony</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2022-05-12</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-11-01</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><!--!--></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3><div class="buttons is-centered"><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>支付宝</span><span class="qrcode"><img src="/img/alipay.jpg" alt="支付宝"></span></a><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>微信</span><span class="qrcode"><img src="/img/wechatpay.png" alt="微信"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2022/08/10/APB%E5%AD%A6%E4%B9%A0/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">APB总线学习</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2022/04/12/hello-world/"><span class="level-item">Hello World</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">评论</h3><div id="comment-container"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script><script>var gitalk = new Gitalk({
+            id: "63319c356f06f7c27325cbf72ee95bdb",
+            repo: "cqlhupt.github.io",
+            owner: "cqlhupt",
+            clientID: "023626b20535f2a6e187",
+            clientSecret: "62c520f8a6d627ff0abeee372f525caad57e12eb",
+            admin: ["cqlhupt"],
+            createIssueManually: false,
+            distractionFreeMode: false,
+            perPage: 20,
+            pagerDirection: "last",
+            
+            
+            enableHotKey: true,
+            language: "zh-CN",
+        })
+        gitalk.render('comment-container')</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="/img/xuancailizi.jpg" alt="Jhon Tony"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">Jhon Tony</p><p class="is-size-6 is-block">Jhon Tony&#039;s Blog</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>Galaxy, Universe</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">5</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">0</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">0</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/cqlhupt" target="_blank" rel="noopener">关注我</a></div><div class="level is-mobile is-multiline"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/cqlhupt"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Facebook" href="https://facebook.com"><i class="fab fa-facebook"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Twitter" href="https://twitter.com"><i class="fab fa-twitter"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Dribbble" href="https://dribbble.com"><i class="fab fa-dribbble"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="RSS" href="/"><i class="fas fa-rss"></i></a></div></div></div><!--!--><div class="card widget" data-type="links"><div class="card-content"><div class="menu"><h3 class="menu-label">链接</h3><ul class="menu-list"><li><a class="level is-mobile" href="https://hexo.io" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">Hexo</span></span><span class="level-right"><span class="level-item tag">hexo.io</span></span></a></li><li><a class="level is-mobile" href="https://bulma.io" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">Bulma</span></span><span class="level-right"><span class="level-item tag">bulma.io</span></span></a></li></ul></div></div></div><!--!--><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2024-11-01T09:40:56.000Z">2024-11-01</time></p><p class="title"><a href="/2024/11/01/ESP-IDF-environment-setup/">ESP-IDF环境搭建</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2023-08-12T12:52:25.000Z">2023-08-12</time></p><p class="title"><a href="/2023/08/12/NAND%20Flash%E6%A0%87%E5%87%86%E6%8E%A5%E5%8F%A3/">NAND Flash标准接口</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2022-08-10T12:52:25.000Z">2022-08-10</time></p><p class="title"><a href="/2022/08/10/APB%E5%AD%A6%E4%B9%A0/">APB总线学习</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2022-05-12T12:52:25.000Z">2022-05-12</time></p><p class="title"><a href="/2022/05/12/Hexo%E6%90%AD%E5%BB%BA/">Hexo搭建</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2022-04-12T12:52:25.000Z">2022-04-12</time></p><p class="title"><a href="/2022/04/12/hello-world/">Hello World</a></p></div></article></div></div><div class="card widget" data-type="archives"><div class="card-content"><div class="menu"><h3 class="menu-label">归档</h3><ul class="menu-list"><li><a class="level is-mobile" href="/archives/2024/11/"><span class="level-start"><span class="level-item">十一月 2024</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2023/08/"><span class="level-start"><span class="level-item">八月 2023</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2022/08/"><span class="level-start"><span class="level-item">八月 2022</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2022/05/"><span class="level-start"><span class="level-item">五月 2022</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2022/04/"><span class="level-start"><span class="level-item">四月 2022</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></div></div></div><!--!--><div class="card widget" data-type="subscribe-email"><div class="card-content"><div class="menu"><h3 class="menu-label">订阅更新</h3><form action="https://feedburner.google.com/fb/a/mailverify" method="post" target="popupwindow" onsubmit="window.open(&#039;https://feedburner.google.com/fb/a/mailverify?uri=&#039;,&#039;popupwindow&#039;,&#039;scrollbars=yes,width=550,height=520&#039;);return true"><input type="hidden" value="" name="uri"><input type="hidden" name="loc" value="en_US"><div class="field has-addons"><div class="control has-icons-left is-expanded"><input class="input" name="email" type="email" placeholder="Email"><span class="icon is-small is-left"><i class="fas fa-envelope"></i></span></div><div class="control"><input class="button" type="submit" value="订阅"></div></div></form></div></div></div><div class="card widget" data-type="subscribe-email"><div class="card-content"><div class="menu"><h3 class="menu-label">follow.it</h3><form action="" method="post" target="_blank"><div class="field has-addons"><div class="control has-icons-left is-expanded"><input class="input" name="email" type="email" placeholder="Email"><span class="icon is-small is-left"><i class="fas fa-envelope"></i></span></div><div class="control"><input class="button" type="submit" value="订阅"></div></div></form></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.svg" alt="Hexo" height="28"></a><p class="is-size-7"><span>&copy; 2024 John Tony</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-CN");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>

@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>NAND Flash标准接口 - Hexo</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Jhon Tony"><meta name="msapplication-TileImage" content="/img/xuancailizi.jpg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Jhon Tony"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="毕业也已经一年了，2021年11月拿到了现公司的offer，22年4月份应公司邀请提前到公司实习（主要是当时公司人太少了，我来了之后芯片设计一共5人，验证1人，项目开始后迟迟招不到人）。5月回校答辩，6月正式成为社畜打工人。由于工作安排，接受offer之后一直在熟悉NAND flash相关的接口，到目前为止，MPW芯片即将回片，虽然已经预见存在很多问题，不过已经完成了fullmask阶段的修改。N"><meta property="og:type" content="blog"><meta property="og:title" content="NAND Flash标准接口"><meta property="og:url" content="https://cqlhupt.github.io/2023/08/12/NAND%20Flash%E6%A0%87%E5%87%86%E6%8E%A5%E5%8F%A3/"><meta property="og:site_name" content="Hexo"><meta property="og:description" content="毕业也已经一年了，2021年11月拿到了现公司的offer，22年4月份应公司邀请提前到公司实习（主要是当时公司人太少了，我来了之后芯片设计一共5人，验证1人，项目开始后迟迟招不到人）。5月回校答辩，6月正式成为社畜打工人。由于工作安排，接受offer之后一直在熟悉NAND flash相关的接口，到目前为止，MPW芯片即将回片，虽然已经预见存在很多问题，不过已经完成了fullmask阶段的修改。N"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://cqlhupt.github.io/img/onfi/SDR_cmd_latch.png"><meta property="og:image" content="https://cqlhupt.github.io/img/onfi/SDR_addr_latch.png"><meta property="og:image" content="https://cqlhupt.github.io/img/onfi/SDR_write_data.png"><meta property="og:image" content="https://cqlhupt.github.io/img/onfi/SDR_read_data_nonedo.png"><meta property="og:image" content="https://cqlhupt.github.io/img/onfi/SDR_read_data_edo.png"><meta property="og:image" content="https://cqlhupt.github.io/img/onfi/NVDDR_cmd_latch.png"><meta property="og:image" content="https://cqlhupt.github.io/img/onfi/NVDDR_addr_latch.png"><meta property="og:image" content="https://cqlhupt.github.io/img/onfi/NVDDR_write_data.png"><meta property="og:image" content="https://cqlhupt.github.io/img/onfi/NVDDR_write_data_clk_stop.png"><meta property="og:image" content="https://cqlhupt.github.io/img/onfi/NVDDR_write_data_clk_stop_and_data_pause.png"><meta property="og:image" content="https://cqlhupt.github.io/img/onfi/NVDDR_read_data.png"><meta property="og:image" content="https://cqlhupt.github.io/img/onfi/NVDDR234_cmd_latch.png"><meta property="og:image" content="https://cqlhupt.github.io/img/onfi/NVDDR234_addr_latch.png"><meta property="og:image" content="https://cqlhupt.github.io/img/onfi/NVDDR234_write_data.png"><meta property="og:image" content="https://cqlhupt.github.io/img/onfi/NVDDR234_read_data.png"><meta property="og:image" content="https://cqlhupt.github.io/img/onfi/read_dummy_toggle.png"><meta property="og:image" content="https://cqlhupt.github.io/img/onfi/NVDDR234_write_pause_resume.png"><meta property="og:image" content="https://cqlhupt.github.io/img/onfi/NVDDR234_write_pause_resume1.png"><meta property="og:image" content="https://cqlhupt.github.io/img/onfi/NVDDR234_read_pause_resume.png"><meta property="og:image" content="https://cqlhupt.github.io/img/onfi/NVDDR234_read_pause_resume1.png"><meta property="og:image" content="https://cqlhupt.github.io/img/onfi/NVDDR234_ODT.png"><meta property="article:published_time" content="2023-08-12T12:52:25.000Z"><meta property="article:modified_time" content="2024-11-01T08:53:28.701Z"><meta property="article:author" content="John Tony"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/img/onfi/SDR_cmd_latch.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://cqlhupt.github.io/2023/08/12/NAND%20Flash%E6%A0%87%E5%87%86%E6%8E%A5%E5%8F%A3/"},"headline":"NAND Flash标准接口","image":["https://cqlhupt.github.io/img/onfi/SDR_cmd_latch.png","https://cqlhupt.github.io/img/onfi/SDR_addr_latch.png","https://cqlhupt.github.io/img/onfi/SDR_write_data.png","https://cqlhupt.github.io/img/onfi/SDR_read_data_nonedo.png","https://cqlhupt.github.io/img/onfi/SDR_read_data_edo.png","https://cqlhupt.github.io/img/onfi/NVDDR_cmd_latch.png","https://cqlhupt.github.io/img/onfi/NVDDR_addr_latch.png","https://cqlhupt.github.io/img/onfi/NVDDR_write_data.png","https://cqlhupt.github.io/img/onfi/NVDDR_write_data_clk_stop.png","https://cqlhupt.github.io/img/onfi/NVDDR_write_data_clk_stop_and_data_pause.png","https://cqlhupt.github.io/img/onfi/NVDDR_read_data.png","https://cqlhupt.github.io/img/onfi/NVDDR234_cmd_latch.png","https://cqlhupt.github.io/img/onfi/NVDDR234_addr_latch.png","https://cqlhupt.github.io/img/onfi/NVDDR234_write_data.png","https://cqlhupt.github.io/img/onfi/NVDDR234_read_data.png","https://cqlhupt.github.io/img/onfi/read_dummy_toggle.png","https://cqlhupt.github.io/img/onfi/NVDDR234_write_pause_resume.png","https://cqlhupt.github.io/img/onfi/NVDDR234_write_pause_resume1.png","https://cqlhupt.github.io/img/onfi/NVDDR234_read_pause_resume.png","https://cqlhupt.github.io/img/onfi/NVDDR234_read_pause_resume1.png","https://cqlhupt.github.io/img/onfi/NVDDR234_ODT.png"],"datePublished":"2023-08-12T12:52:25.000Z","dateModified":"2024-11-01T08:53:28.701Z","author":{"@type":"Person","name":"John Tony"},"publisher":{"@type":"Organization","name":"Hexo","logo":{"@type":"ImageObject","url":"https://cqlhupt.github.io/img/logo.svg"}},"description":"毕业也已经一年了，2021年11月拿到了现公司的offer，22年4月份应公司邀请提前到公司实习（主要是当时公司人太少了，我来了之后芯片设计一共5人，验证1人，项目开始后迟迟招不到人）。5月回校答辩，6月正式成为社畜打工人。由于工作安排，接受offer之后一直在熟悉NAND flash相关的接口，到目前为止，MPW芯片即将回片，虽然已经预见存在很多问题，不过已经完成了fullmask阶段的修改。N"}</script><link rel="canonical" href="https://cqlhupt.github.io/2023/08/12/NAND%20Flash%E6%A0%87%E5%87%86%E6%8E%A5%E5%8F%A3/"><link rel="icon" href="/img/xuancailizi.jpg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+          Array
+              .from(document.querySelectorAll('.tab-content'))
+              .forEach($tab => {
+                  $tab.classList.add('is-hidden');
+              });
+          Array
+              .from(document.querySelectorAll('.tabs li'))
+              .forEach($tab => {
+                  $tab.classList.remove('is-active');
+              });
+          const $activeTab = document.querySelector(location.hash);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+          const $tabMenu = document.querySelector(`a[href="${location.hash}"]`);
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.svg" alt="Hexo" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2023-08-12T12:52:25.000Z" title="2023/8/12 20:52:25">2023-08-12</time>发表</span><span class="level-item"><time dateTime="2024-11-01T08:53:28.701Z" title="2024/11/1 16:53:28">2024-11-01</time>更新</span><span class="level-item">38 分钟读完 (大约5724个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">NAND Flash标准接口</h1><div class="content"><p>毕业也已经一年了，2021年11月拿到了现公司的offer，22年4月份应公司邀请提前到公司实习（主要是当时公司人太少了，我来了之后芯片设计一共5人，验证1人，项目开始后迟迟招不到人）。5月回校答辩，6月正式成为社畜打工人。由于工作安排，接受offer之后一直在熟悉NAND flash相关的接口，到目前为止，MPW芯片即将回片，虽然已经预见存在很多问题，不过已经完成了fullmask阶段的修改。NAND flash的接口与DDR SDRAM接口存在一定的相似性，在此记录以便巩固相关知识，也为后续工作和学习打下基础。</p>
+<span id="more"></span>
+
+<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><ul>
+<li>JEDEC协会统一管理，分化出ONFi（开放）和Toggle（封闭）</li>
+<li>具有和DDR SDRAM类似的接口</li>
+<li>地址和数据复用同一组数据线（还未发布的JESD230G版本中可能会将二者分开）</li>
+<li></li>
+</ul>
+<h1 id="信号定义"><a href="#信号定义" class="headerlink" title="信号定义"></a>信号定义</h1><table>
+<thead>
+<tr>
+<th>名称</th>
+<th>来源</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CE_n</td>
+<td>主控</td>
+<td>片选信号，低电平有效，用于使能颗粒</td>
+</tr>
+<tr>
+<td>ALE</td>
+<td>主控</td>
+<td>地址锁存使能信号，高电平有效</td>
+</tr>
+<tr>
+<td>CLE</td>
+<td>主控</td>
+<td>命令锁存使能信号，高电平有效</td>
+</tr>
+<tr>
+<td>WE_n&#x2F;CLK</td>
+<td>主控</td>
+<td>SDR模式中写数据、命令和地址的边沿信号<br>NVDDR模式中向颗粒输出持续时钟<br>NVDDR2&#x2F;NVDDR3&#x2F;NVLPDDR4&#x2F;Toggle模式中写命令和地址的边沿信号</td>
+</tr>
+<tr>
+<td>RE_n&#x2F;RE_n_c</td>
+<td>主控</td>
+<td>SDR模式中读数据边沿信号，用于采样<br>NVDDR模式中指示读写高电平表示写，低电平表示读<br>NVDDR2&#x2F;NVDDR3&#x2F;NVLPDDR4&#x2F;Toggle模式中主控发送给颗粒的读数据的边沿信号<br><strong>互补信号RE_n_c仅在高速DDR时才开启</strong></td>
+</tr>
+<tr>
+<td>DQS&#x2F;DQS_c</td>
+<td>主控&#x2F;颗粒</td>
+<td>用于NVDDR&#x2F;NVDDR2&#x2F;NVDDR3&#x2F;NVLPDDR4&#x2F;Toggle模式的数据strobe信号<br>写数据时其边沿位于DQ信号窗口的中间，由主控发往颗粒<br>读数据时其边沿与DQ信号变化边沿对齐，由颗粒接收RE_n信号后返回给主控<br><strong>互补信号DQS_c仅在高速DDR时才开启</strong></td>
+</tr>
+<tr>
+<td>DQ[7:0]</td>
+<td>主控&#x2F;颗粒</td>
+<td>数据信号，有8位和16位两种，16位的较为少见，且16位数据线在发送地址和命令时只使用低8位，只有在传输数据时才会使用全部16位数据线</td>
+</tr>
+<tr>
+<td>WP_n</td>
+<td>主控</td>
+<td>写保护，低电平有效<br>可复用为ODT控制线，用于主控控制颗粒的ODT使能时间而不是颗粒自动ODT</td>
+</tr>
+<tr>
+<td>Rb_n</td>
+<td>颗粒</td>
+<td>ready&#x2F;busy信号，高电平表示ready，低电平表示busy</td>
+</tr>
+</tbody></table>
+<p>* 此处的信号均为数字信号，如需了解电源相关模拟信号，请参考具体颗粒手册或ONFi协议</p>
+<h1 id="时序模式"><a href="#时序模式" class="headerlink" title="时序模式"></a>时序模式</h1><h2 id="一、SDR-x2F-Legacy"><a href="#一、SDR-x2F-Legacy" class="headerlink" title="一、SDR&#x2F;Legacy"></a>一、SDR&#x2F;Legacy</h2><p>SDR即Single Data Rate的缩写，在Toggle组织中也有将该模式称为Legacy的。在2006年的NAND市场混乱不堪，各家的接口标准和时序也不一致，当时的颗粒速率比较低，于是ONFi协会成立并发布的第一版ONFi协议。第一版协议中描述了该种工作模式，此工作模式下最高支持50MB&#x2F;s。</p>
+<h3 id="命令锁存"><a href="#命令锁存" class="headerlink" title="命令锁存"></a>命令锁存</h3><p><img src="/img/onfi/SDR_cmd_latch.png" alt="SDR命令锁存时序" title="SDR命令锁存时序"></p>
+<blockquote>
+<ol>
+<li>CE_n信号拉低，对要操作的颗粒进行片选</li>
+<li>CLE信号拉高，ALE信号保持低</li>
+<li>主控端将命令放在DQ[7:0]上</li>
+<li>主控控制WE_n产生一个边沿</li>
+</ol>
+</blockquote>
+<p>从时序图中可以看到，时序参数均以WE_n的上升沿为参考，上升沿前的时间为建立时间（setup），上升沿后的时间为保持时间（hold）。只有WE_n拉低的时间为tWP，此参数取决于当前SDR工作的速率，其值为当前工作速率下的半个时钟周期，如工作于25MHz，则tWP应为20ns，数据速率则为25MB&#x2F;s。</p>
+<h3 id="地址锁存"><a href="#地址锁存" class="headerlink" title="地址锁存"></a>地址锁存</h3><p><img src="/img/onfi/SDR_addr_latch.png" alt="SDR地址锁存时序" title="SDR地址锁存时序"></p>
+<blockquote>
+<ol>
+<li>CE_n信号拉低，对要操作的颗粒进行片选</li>
+<li>ALE信号拉高，CLE信号保持低</li>
+<li>主控端将地址放在DQ[7:0]上</li>
+<li>主控控制WE_n产生一个边沿</li>
+</ol>
+</blockquote>
+<p>可以发现地址锁存时序与命令锁存时序非常相似，此处多出来的tWH参数其实和tWP参数一样，而tWC&#x3D;tWP+TWH。tWH参数的引入主要是因为每次发送地址时总是含有多个Byte（目前主流的是5~6Byte，特殊操作会有10Byte），tWH描述的是两个Byte地址之间的间隔时间。</p>
+<h3 id="写数据"><a href="#写数据" class="headerlink" title="写数据"></a>写数据</h3><p><img src="/img/onfi/SDR_write_data.png" alt="SDR写数据时序" title="SDR写数据时序"></p>
+<blockquote>
+<ol>
+<li>CE_n信号拉低，对要操作的颗粒进行片选</li>
+<li>ALE信号和CLE信号保持低</li>
+<li>主控端将数据连续放在DQ[7:0]上</li>
+<li>主控控制WE_n连续产生与每个数据对应的上升沿</li>
+</ol>
+</blockquote>
+<p>SDR写数据时，每个上升沿都是与数据相对应的，所以上升沿不能乱给，不然会导致数据顺序出错，在数据读出的时候会出现解码引擎无法完成解码的情况。时序参数增加了tCLH和tCH，规定的是最后一个数据写完之后CE_n和CLE信号需要保持的时间。</p>
+<h3 id="读数据"><a href="#读数据" class="headerlink" title="读数据"></a>读数据</h3><ul>
+<li><p>非EDO模式读<br><img src="/img/onfi/SDR_read_data_nonedo.png" alt="SDR非EDO读数据时序" title="SDR非EDO读数据时序"></p>
+<blockquote>
+<ol>
+<li>CE_n信号拉低，对要操作的颗粒进行片选</li>
+<li>ALE信号和CLE信号保持低，主控端释放DQ[7:0]数据线（写数据时输出，读数据时输入）</li>
+<li>主控端拉低RE_n信号</li>
+<li>RE_n下降沿后经过tREA时间后，颗粒将数据放在DQ[7:0]上</li>
+<li>主控端拉高RE_n信号，并使用上升沿对DQ[7:0]上的数据进行采样</li>
+<li>重复3~5步，完成所有需要的数据采样</li>
+</ol>
+</blockquote>
+<p>读数据时参考的时钟边沿是RE_n的上升沿，RE_n的周期（tRC）是工作时钟的周期，tRC&#x3D;tRP+tREH。另一个重要的参数是tRR，因为在发完读数据命令之后到开始读数据之前，颗粒会处于Busy的状态（颗粒在此期间将数据从浮栅晶体管阵列中读出到缓存），在颗粒Ready之后到RE_n拉低之前的时间需要大于等于tRR。</p>
+</li>
+<li><p>EDO模式读<br><img src="/img/onfi/SDR_read_data_edo.png" alt="SDR EDO读数据时序" title="SDR EDO读数据时序"></p>
+<blockquote>
+<ol>
+<li>CE_n信号拉低，对要操作的颗粒进行片选</li>
+<li>ALE信号和CLE信号保持低，主控端释放DQ[7:0]数据线（写数据时输出，读数据时输入）</li>
+<li>主控端拉低RE_n信号</li>
+<li>RE_n下降沿后经过tREA时间后，颗粒将数据放在DQ[7:0]上</li>
+<li>主控端拉高RE_n信号，并下一个下降沿对DQ[7:0]上的数据进行采样</li>
+<li>重复3~5步，完成所有需要的数据采样</li>
+</ol>
+</blockquote>
+<p>观察时序图可以发现，此时tREA参数似乎长于非EDO的tREA，但是其实tREA参数对应于固定的一颗颗粒是比较一致的，只不过是我们提高了RE_n的速度（tRC变小了），看起来tREA相对变长了。<br>这就带来一个问题，颗粒那边的数据输出是由下降沿触发的，采样数据的下降沿比触发数据下降沿晚一个周期，导致最后一个数据没有RE_n的下降沿进行采样。目前我的做法是将RE_n信号整体后延一个周期，再用来采样，也就是说将触发数据的下降沿沿延迟一个周期作为采样数据的下降沿，如果你有更好的方法，烦请与我交流，谢谢。</p>
+</li>
+</ul>
+<h2 id="二、NVDDDR"><a href="#二、NVDDDR" class="headerlink" title="二、NVDDDR"></a>二、<del>NVDDDR</del></h2><p>此模式为源同步模式，其接口与DDR SDRAM最为接近，包含了一个主控输出的同步时钟（WE_n&#x2F;CLK）给颗粒，但是读写数据时仍需使用DQS信号，由于其相对于两外两种模式的复杂性和电气特性要求（主要是时钟信号、DQ信号、DQS信号的PCB等长布线，源同步时钟带来的功耗、高频干扰问题），目前已经没有颗粒厂商再研发相对应的颗粒，其速率也止步于100MHz DDR（200MB&#x2F;s）。对此模式可以权当了解，无需深入。</p>
+<h3 id="命令锁存-1"><a href="#命令锁存-1" class="headerlink" title="命令锁存"></a>命令锁存</h3><p><img src="/img/onfi/NVDDR_cmd_latch.png" alt="NVDDR命令锁存时序" title="NVDDR命令锁存时序"></p>
+<blockquote>
+<ol>
+<li>CE_n信号拉低，对要操作的颗粒进行片选；ALE和CLE也拉低，并且保证三者拉低的时间相对于拉低后的第一个CLK上升沿满足途中tCS和tCALS参数</li>
+<li>CLE信号拉高，ALE保持低，命令放在DQ[7:0]上</li>
+<li>确保CLE拉高期间包含一个CLK上升沿，并满足tCALS和tCALH参数</li>
+</ol>
+</blockquote>
+<p>可以发现，简单的一个命令锁存时序，已经包含相当多的时序参数，并且控制器内部是同步的数字电路，所有在控制过程中会给我们造成一定的麻烦。在控制时可以将CLE和ALE置于默认拉低的状态，让tCALS提前满足，CE_n用于片选，默认保持为高，需要使用时再拉低，tCAD参数则需要计数器。由于CLE中需要包含一个CLK的上升沿，所以CLK可以使用内部电路时钟的反相输出，这样的话内部控制信号变化时就对应CLK的下降沿。</p>
+<h3 id="地址锁存-1"><a href="#地址锁存-1" class="headerlink" title="地址锁存"></a>地址锁存</h3><p><img src="/img/onfi/NVDDR_addr_latch.png" alt="NVDDR地址锁存时序" title="NVDDR地址锁存时序"></p>
+<blockquote>
+<ol>
+<li>CE_n信号拉低，对要操作的颗粒进行片选；ALE和CLE也拉低，并且保证三者拉低的时间相对于拉低后的第一个CLK上升沿满足途中tCS和tCALS参数</li>
+<li>ALE信号拉高，CLE保持低，命令放在DQ[7:0]上</li>
+<li>确保ALE拉高期间包含一个CLK上升沿，并满足tCALS和tCALH参数</li>
+</ol>
+</blockquote>
+<p>地址锁存与命令锁存相似，不多赘述。</p>
+<h3 id="写数据-1"><a href="#写数据-1" class="headerlink" title="写数据"></a>写数据</h3><p><img src="/img/onfi/NVDDR_write_data.png" alt="NVDDR写数据时序" title="NVDDR写数据时序"></p>
+<blockquote>
+<ol>
+<li>CE_n信号拉低，对要操作的颗粒进行片选；ALE和CLE也拉低，并且保证三者拉低的时间相对于拉低后的第一个CLK上升沿满足途中tCS和tCALS参数</li>
+<li>拉低DQS，保持tWPRE时间</li>
+<li>计数达到tCAD参数之后，ALE和CLE信号拉高，截取需要的CLK脉冲数量</li>
+<li>ALE和CLE上升沿之后的第一个CLK上升沿开始计算tDQSS参数，满足后开始将数据放在DQ[7:0]上，并且保证DQS的边沿与数据的中心对齐</li>
+<li>保持DQS拉低tWPST时间</li>
+</ol>
+</blockquote>
+<p>这里出现了非常奇怪的一个时序，可以观察到的是ALE、CLE有效的时间和DQS、DQ[7:0]的有效时间是错开的，tDQSS时序是0.75~1.25倍的工作时钟周期，ALE和CLE截取的CLK周期应该与DQS输出的周期数量一致。可以看到tDQSS的时间正好落在负四分之一周期和正四分之一周期之间，由于DQS的边沿要和数据DQ[7:0]的中心对齐，所以我们使用DLL器件对截取出来的时钟进行延迟四分之一周期得到DQS，这样tDQSS时间至少会落在1.25倍时钟周期上，如果这个时序相当严格的话，那么非常容易违反。不过，如果延续之前的思路将内部时钟反相之后作为CLK输出，那么这个DQS的起始点可以落在0.75倍时钟周期上，可以满足要求。</p>
+<p><img src="/img/onfi/NVDDR_write_data_clk_stop.png" alt="NVDDR时钟停止写数据时序" title="NVDDR时钟停止写数据时序"><br>这个时序明显是为了节省功耗而设计的，在ALE和CLE拉高一个周期之后（包含一个CLK上升沿，这个上升沿将会锁存ALE、CLE、W&#x2F;R_n，所以这三个信号在时钟关闭之后就不关心了），关闭CLK时钟输出。同样的问题依旧存在，当我们重新打开CLK时，数据仍然没有送完，表明除了CLK输出控制发生变化之外其他的信号控制和数量均未发生变化。</p>
+<p><img src="/img/onfi/NVDDR_write_data_clk_stop_and_data_pause.png" alt="NVDDR时钟停止和数据暂停写数据时序" title="NVDDR时钟停止和数据暂停写数据时序"><br>此时序在上一个时序的基础上提供了一种数据暂停（非退出写数据去执行其他命令）等待的功能，即拉住DQS信号，让它不发生翻转。既然存在这种时序那是否意味着CLK没有停止的写数据时序是不能对DQS和数据进行暂停的。同时tDPZ是1.5倍时钟周期。</p>
+<h3 id="读数据-1"><a href="#读数据-1" class="headerlink" title="读数据"></a>读数据</h3><p><img src="/img/onfi/NVDDR_read_data.png" alt="NVDDR读数据时序" title="NVDDR读数据时序"></p>
+<blockquote>
+<ol>
+<li>CE_n信号拉低，对要操作的颗粒进行片选；ALE和CLE也拉低，并且保证三者拉低的时间相对于拉低后的第一个CLK上升沿满足途中tCS和tCALS参数</li>
+<li>拉低W&#x2F;R_n信号，满足tCALS时间，保持tWRCK时间</li>
+<li>计数达到tCAD参数之后，ALE和CLE信号拉高，截取需要的CLK脉冲数量</li>
+<li>DQS和数据从颗粒返回，主控内部对DQS延迟四分之一个周期对数据进行双边沿采样<br>这里又存在一个暂停的问题，如果主控内部的数据处理路径上出现了反压，那么是否能都通过拉低ALE、CLE进行流量控制，我倾向于是可以的，如果不能，那么这个时序将会给主控设计带来很大的挑战，因为他要求主控内部存在能够装得下一个Page的Buffer来避免遇到内部数据路径反压导致的数据断流。</li>
+</ol>
+</blockquote>
+<p>总的来说，NVDDR已经成为时代的眼泪。NAND的接口最终还是转向了Toggle的时序。</p>
+<h2 id="三、NVDDR2-x2F-NVDDR3-x2F-NVLPDDR4-x2F-Toggle"><a href="#三、NVDDR2-x2F-NVDDR3-x2F-NVLPDDR4-x2F-Toggle" class="headerlink" title="三、NVDDR2&#x2F;NVDDR3&#x2F;NVLPDDR4&#x2F;Toggle"></a>三、NVDDR2&#x2F;NVDDR3&#x2F;NVLPDDR4&#x2F;Toggle</h2><h3 id="命令锁存-2"><a href="#命令锁存-2" class="headerlink" title="命令锁存"></a>命令锁存</h3><p><img src="/img/onfi/NVDDR234_cmd_latch.png" alt="NVDDR234命令锁存时序" title="NVDDR234命令锁存时序"><br>命令的锁存与SDR的锁存时序基本一致，需要注意的点是此处的tWP时间不再是SDR模式下的半个周期，需满足tWP≥11ns，tWH≥11ns，tWC≥25ns。</p>
+<h3 id="地址锁存-2"><a href="#地址锁存-2" class="headerlink" title="地址锁存"></a>地址锁存</h3><p><img src="/img/onfi/NVDDR234_addr_latch.png" alt="NVDDR234地址锁存时序" title="NVDDR234地址锁存时序"><br>命令和地址的锁存时序基本一致，不赘述。</p>
+<h3 id="写数据-2"><a href="#写数据-2" class="headerlink" title="写数据"></a>写数据</h3><p><img src="/img/onfi/NVDDR234_write_data.png" alt="NVDDR234写数据时序" title="NVDDR234写数据时序"></p>
+<blockquote>
+<ol>
+<li>RE_n、WE_n、DQS保持高，对应差分信号保持低，ALE、CLE保持低</li>
+<li>拉低CE_n，片选使能颗粒</li>
+<li>拉低DQS，如果开启了差分，则同时拉高互补信号，保持tWPRE&#x2F;tWPRE2时间</li>
+<li>顺序输出数据和DQS，DQS边沿与数据中心对齐，可以通过拉住DQS来进行流量控制</li>
+<li>数据输出完后，拉低DQS，保持tWPST时间</li>
+<li>拉高CLE，经过tWPSTH时间后将颗粒的Program指令（如10h，每个颗粒厂商的命令不同）放在DQ上，拉低WE_n</li>
+<li>经过tWP时间后，拉高WE_n，经过tCDQSH时间后释放DQS及其互补信号</li>
+</ol>
+</blockquote>
+<p>可以看到，这里的时序是比较复杂的，其实我们可以将其拆分成两个部分，第1<del>5步是写数据，6</del>7步发Program命令。但是这两个操作不是完全分开的，它们通过DQS保持低联系在一起，因为通常DQS信号是保持高的，因为在写数据的初始状态要求DQS为高，所以主控在结束第一部分写数据操作后会想拉高DQS，这就造成了冲突，所以内部逻辑需要区分当前执行的操作是否在最后结束时能够把DQS给拉高。</p>
+<p>这里ONFi和Toggle存在一定的区别，在使用ONFi标准的仿真模型上，确实检测了DQS的拉高时间，但是在Toggle标准的仿真模型上则没有做检查。</p>
+<h3 id="读数据-2"><a href="#读数据-2" class="headerlink" title="读数据"></a>读数据</h3><p><img src="/img/onfi/NVDDR234_read_data.png" alt="NVDDR234读数据时序" title="NVDDR234读数据时序"></p>
+<blockquote>
+<ol>
+<li>RE_n、WE_n、DQS保持高，对应差分信号保持低，ALE、CLE保持低</li>
+<li>拉低CE_n，片选使能颗粒</li>
+<li>拉低RE_n，如果开启了差分，则同时拉高互补信号，保持tRPRE&#x2F;tRPRE2&#x2F;tRPRE3时间 </li>
+<li>为了确保颗粒有反应，主控需要在tDQSD时间之后检查DQS是否被颗粒正常拉低*</li>
+<li>主控开始输出RE_n的脉冲，可以通过拉住RE_n信号进行流控</li>
+<li>经过tDQSRE时间，颗粒将接收到的RE_n信号作为DQS将数据带出来（DQS边沿与DQ变化沿对齐）</li>
+<li>数据数量足够之后保持RE_n为低，持续时间为tRPST+tRPSTH，中间的分界是颗粒侧ODT关闭的时刻</li>
+</ol>
+</blockquote>
+<p>* ONFi中RE_n拉低到DQS拉低的时间是tDQSD，最大值为18ns，Toggle中该时间则是tDQSRE，最大值为25ns。<br>ONFi在读任何数据（read status&#x2F;get feature&#x2F;read data）时DQ上的第一个数据都是在DQS的第一个上升沿才出现在总线上的；Toggle只在read data时DQ上的第一个数据是在DQS的第一个上升沿才出现在总线上的，其他的读操作中，DQS拉低的时刻，第一个数据就会出现在DQ上，下一个下降沿DQ上会出现下一个数据，这种操作通常都是repeat twice的（一个DQS周期输出的数据是相同的）。</p>
+<h3 id="Dummy-Toggle-x2F-Warmup"><a href="#Dummy-Toggle-x2F-Warmup" class="headerlink" title="Dummy Toggle&#x2F;Warmup"></a>Dummy Toggle&#x2F;Warmup</h3><p><img src="/img/onfi/read_dummy_toggle.png" alt="read Dummy Toggle/Warmup" title="read Dummy Toggle/Warmup"><br>随着颗粒工作频率的增加（400MHz以上，800MB&#x2F;s以上），信号质量越来越难以得到保障，于是在协议中引入了一些保障信号质量的措施。</p>
+<p>在读写数据前引入一些额外的RE_n和DQS周期，这些周期不包含有用数据，仅用于信号质量保障，在ONFi上称为warmup，在Toggle上称为dummy toggle。这个功能需要通过设置颗粒的参数来进行开启，默认一般不开启。目前支持的周期数量一般为1，2，4个。</p>
+<p>写数据时，在输出DQS和数据前，先输出几个DQS周期，数据不用关心；同理在读数据时RE_n输出的前几个dummy周期也不会从颗粒带回正常数据，主控在获取这些无用数据后丢弃即可。</p>
+<p>读写的Dummy Toggle是独立开关和配置的，二者可以配置不一样的dummy周期数量，ONFi协议中要求在800MB&#x2F;s以上时需要开启该功能</p>
+<h3 id="读写数据暂停-x2F-退出（pause-x2F-exit）"><a href="#读写数据暂停-x2F-退出（pause-x2F-exit）" class="headerlink" title="读写数据暂停&#x2F;退出（pause&#x2F;exit）"></a>读写数据暂停&#x2F;退出（pause&#x2F;exit）</h3><p>在正常的数据读写过程中，我们可能会遇到需要中断传输释放IO，处理主控内部信息，调整主控内部状态等。NVDDR234模式下提供了一种退出当前数据传输的方法，就是在数据传输需要中断时，拉高CE_n&#x2F;ALE&#x2F;CLE退出传输，重启传输时，将CE_n&#x2F;ALE&#x2F;CLE拉低即可。</p>
+<p>此退出功能与拉住DQS和RE_n的流控不同，在重启传输时，如果开启了dummy toggle，则需要重新发送额外的RE_n&#x2F;DQS周期，后者不需要重新发送dummy toggle。</p>
+<p>颗粒在800MB&#x2F;s以上工作时，如果传输退出超过1μs未恢复，则颗粒可以要求重启时主控端需要先发送Change Read Column&#x2F;Change Read Column<br>Enhanced命令，由颗粒厂商决定，请参考具体颗粒数据手册。</p>
+<p><img src="/img/onfi/NVDDR234_write_pause_resume.png" alt="NVDDR234写数据用CE_n暂停时序" title="NVDDR234写数据用CE_n暂停时序"><br><img src="/img/onfi/NVDDR234_write_pause_resume1.png" alt="NVDDR234写数据用CLE暂停时序" title="NVDDR234写数据用CLE暂停时序"><br><img src="/img/onfi/NVDDR234_read_pause_resume.png" alt="NVDDR234读数据用CE_n暂停时序" title="NVDDR234读数据用CE_n暂停时序"><br><img src="/img/onfi/NVDDR234_read_pause_resume1.png" alt="NVDDR234读数据用CLE暂停时序" title="NVDDR234读数据用CLE暂停时序"></p>
+<h3 id="ODT（On-Die-Termination）"><a href="#ODT（On-Die-Termination）" class="headerlink" title="ODT（On Die Termination）"></a>ODT（On Die Termination）</h3><p><img src="/img/onfi/NVDDR234_ODT.png" alt="NVDDR234 ODT匹配示意" title="NVDDR234 ODT匹配示意"></p>
+<p>高速信号在阻抗不连续的导体之间会出现信号反射，为了防止反射信号对后续传输的码字产生影响，在颗粒内部引入了片上端接电阻，此电阻可以配置，以适应各种状态下的信号反射。</p>
+<p>ODT用于RE_n&#x2F;RE_n_c、DQS&#x2F;DQS_c、DQ[7:0]（即颗粒接收的所有高速信号），命令和地址的发送不使用ODT。</p>
+<p>ODT分为Self Termination和Matrix Termination，我的理解是前者只使用当前操作的Die内部的端接电阻进行端接，而后者可以使用相同CE_n下其他Die的端接电阻配合当前Die进行端接。Matrix Termination具有更强的灵活性。</p>
+<p>ONFi5.0协议上更新了NVLPDDR4接口的电气特性，包括新的端接方式，如上图中描述的NVDDR2&#x2F;3使用的均为CTT（中心端接），NVLPDDR4则需要使用LTT（低端端接）。</p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>NAND Flash标准接口</p><p><a href="https://cqlhupt.github.io/2023/08/12/NAND Flash标准接口/">https://cqlhupt.github.io/2023/08/12/NAND Flash标准接口/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>John Tony</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2023-08-12</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-11-01</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><!--!--></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3><div class="buttons is-centered"><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>支付宝</span><span class="qrcode"><img src="/img/alipay.jpg" alt="支付宝"></span></a><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>微信</span><span class="qrcode"><img src="/img/wechatpay.png" alt="微信"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2024/11/01/ESP-IDF-environment-setup/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">ESP-IDF环境搭建</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2022/08/10/APB%E5%AD%A6%E4%B9%A0/"><span class="level-item">APB总线学习</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">评论</h3><div id="comment-container"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.css"><script src="https://cdn.jsdelivr.net/npm/gitalk@1.7.2/dist/gitalk.min.js"></script><script>var gitalk = new Gitalk({
+            id: "133ed791569d301ed943098ee4b52d5c",
+            repo: "cqlhupt.github.io",
+            owner: "cqlhupt",
+            clientID: "023626b20535f2a6e187",
+            clientSecret: "62c520f8a6d627ff0abeee372f525caad57e12eb",
+            admin: ["cqlhupt"],
+            createIssueManually: false,
+            distractionFreeMode: false,
+            perPage: 20,
+            pagerDirection: "last",
+            
+            
+            enableHotKey: true,
+            language: "zh-CN",
+        })
+        gitalk.render('comment-container')</script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="/img/xuancailizi.jpg" alt="Jhon Tony"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">Jhon Tony</p><p class="is-size-6 is-block">Jhon Tony&#039;s Blog</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>Galaxy, Universe</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">5</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">0</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">0</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/cqlhupt" target="_blank" rel="noopener">关注我</a></div><div class="level is-mobile is-multiline"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/cqlhupt"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Facebook" href="https://facebook.com"><i class="fab fa-facebook"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Twitter" href="https://twitter.com"><i class="fab fa-twitter"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Dribbble" href="https://dribbble.com"><i class="fab fa-dribbble"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="RSS" href="/"><i class="fas fa-rss"></i></a></div></div></div><!--!--><div class="card widget" data-type="links"><div class="card-content"><div class="menu"><h3 class="menu-label">链接</h3><ul class="menu-list"><li><a class="level is-mobile" href="https://hexo.io" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">Hexo</span></span><span class="level-right"><span class="level-item tag">hexo.io</span></span></a></li><li><a class="level is-mobile" href="https://bulma.io" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">Bulma</span></span><span class="level-right"><span class="level-item tag">bulma.io</span></span></a></li></ul></div></div></div><!--!--><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2024-11-01T09:40:56.000Z">2024-11-01</time></p><p class="title"><a href="/2024/11/01/ESP-IDF-environment-setup/">ESP-IDF环境搭建</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2023-08-12T12:52:25.000Z">2023-08-12</time></p><p class="title"><a href="/2023/08/12/NAND%20Flash%E6%A0%87%E5%87%86%E6%8E%A5%E5%8F%A3/">NAND Flash标准接口</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2022-08-10T12:52:25.000Z">2022-08-10</time></p><p class="title"><a href="/2022/08/10/APB%E5%AD%A6%E4%B9%A0/">APB总线学习</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2022-05-12T12:52:25.000Z">2022-05-12</time></p><p class="title"><a href="/2022/05/12/Hexo%E6%90%AD%E5%BB%BA/">Hexo搭建</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2022-04-12T12:52:25.000Z">2022-04-12</time></p><p class="title"><a href="/2022/04/12/hello-world/">Hello World</a></p></div></article></div></div><div class="card widget" data-type="archives"><div class="card-content"><div class="menu"><h3 class="menu-label">归档</h3><ul class="menu-list"><li><a class="level is-mobile" href="/archives/2024/11/"><span class="level-start"><span class="level-item">十一月 2024</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2023/08/"><span class="level-start"><span class="level-item">八月 2023</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2022/08/"><span class="level-start"><span class="level-item">八月 2022</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2022/05/"><span class="level-start"><span class="level-item">五月 2022</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2022/04/"><span class="level-start"><span class="level-item">四月 2022</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></div></div></div><!--!--><div class="card widget" data-type="subscribe-email"><div class="card-content"><div class="menu"><h3 class="menu-label">订阅更新</h3><form action="https://feedburner.google.com/fb/a/mailverify" method="post" target="popupwindow" onsubmit="window.open(&#039;https://feedburner.google.com/fb/a/mailverify?uri=&#039;,&#039;popupwindow&#039;,&#039;scrollbars=yes,width=550,height=520&#039;);return true"><input type="hidden" value="" name="uri"><input type="hidden" name="loc" value="en_US"><div class="field has-addons"><div class="control has-icons-left is-expanded"><input class="input" name="email" type="email" placeholder="Email"><span class="icon is-small is-left"><i class="fas fa-envelope"></i></span></div><div class="control"><input class="button" type="submit" value="订阅"></div></div></form></div></div></div><div class="card widget" data-type="subscribe-email"><div class="card-content"><div class="menu"><h3 class="menu-label">follow.it</h3><form action="" method="post" target="_blank"><div class="field has-addons"><div class="control has-icons-left is-expanded"><input class="input" name="email" type="email" placeholder="Email"><span class="icon is-small is-left"><i class="fas fa-envelope"></i></span></div><div class="control"><input class="button" type="submit" value="订阅"></div></div></form></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.svg" alt="Hexo" height="28"></a><p class="is-size-7"><span>&copy; 2024 John Tony</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-CN");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>
