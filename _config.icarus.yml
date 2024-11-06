@@ -160,29 +160,28 @@ search:
     type: insight
 # Comment plugin configurations
 # https://ppoffice.github.io/hexo-theme-icarus/categories/Plugins/Comment/
-comment:
-    type: gitalk
-    client_id: 023626b20535f2a6e187
-    client_secret: 62c520f8a6d627ff0abeee372f525caad57e12eb
-    repo: cqlhupt.github.io
-    owner: cqlhupt
-    admin:
-        - cqlhupt
-    labels: 'gitalk'
-    per_page: 20                    # 可选填
-    distraction_free_mode: false    # 可选填
-    pager_direction: last           # 可选填
-    create_issue_manually: false    # 可选填
-    proxy:                          # 可选填
-    flip_move_options:              # 可选填
-    enable_hotkey: true             # 可选填
-    language: zh-CN                 # 可选填
+# comment:
+#     type: gitalk
+#     client_id: 
+#     client_secret: 
+#     repo: cqlhupt.github.io
+#     owner: cqlhupt
+#     admin: cqlhupt
+#     # labels: 'gitalk'
+#     per_page: 20                    # 可选填
+#     distraction_free_mode: false    # 可选填
+#     pager_direction: last           # 可选填
+#     create_issue_manually: false    # 可选填
+#     proxy:                          # 可选填
+#     flip_move_options:              # 可选填
+#     enable_hotkey: true             # 可选填
+#     language: zh-CN                 # 可选填
 
     # type: gitment
     # owner: cqlhupt
     # repo: cqlhupt.github.io
-    # client_id: 0f6183a567af2be0452fv
-    # client_secret: 2004b1c980284bea1cce15931c50590365341a06
+    # client_id: 
+    # client_secret: 
     # theme: gitment.defaultTheme     # 可选填
     # per_page: 20                    # 可选填
     # max_comment_height: 250         # 可选填
@@ -193,8 +192,8 @@ comment:
 #   owner: cqlhupt
 #   admin: cqlhupt
 #   repo: cqlhupt.github.io
-#   ClientID: 0f6183a567af2be0452f
-#   ClientSecret: da2225e1ed90cc59a7ada928b2a910a9551e97cb
+#   ClientID: 
+#   ClientSecret: 
 #   labels: 'gitalk' 
 #   distractionFreeMode: true  
 

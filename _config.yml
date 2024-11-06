@@ -81,3 +81,20 @@ deploy:
   type: git
   repo: git@github.com:cqlhupt/cqlhupt.github.io.git
   brabch: master
+
+# gitalk:
+# enable: true
+# githubID: cqlhupt # 例：asdfv1929
+# repo: cqlhupt.github.io # 例：blog
+# ClientID: 
+# ClientSecret: 
+# adminUser: cqlhupt #指定可初始化评论账户
+# distractionFreeMode: true
+
+comment:
+    type: utterances
+    repo: cqlhupt/cqlhupt.github.io
+    issue_term: pathname        # 必填项，与issue_number二选一填写
+    issue_number: 100           # 必填项，与issue_term二选一填写，每篇文章对应一个issue，填写前需要手动创建issue
+    label: some-issue-label     # 可选填
+    theme: github-light         # 可选填
