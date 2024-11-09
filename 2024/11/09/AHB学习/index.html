@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>AHB学习 - Hexo</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Jhon Tony"><meta name="msapplication-TileImage" content="/img/xuancailizi.jpg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Jhon Tony"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="AHB是新一代AMBA总线，旨在满足高性能可综合设计的要求。AHB是支持多主机和高带宽操作的高性能总线。学习AHB对我们设计和使用AMBA总线兼容模块具有重要意义。作为AMBA总线的一部分，在芯片中得到了广泛的应用，学习总线，理解总线能让我们在设计模块时游刃有余。"><meta property="og:type" content="blog"><meta property="og:title" content="AHB学习"><meta property="og:url" content="https://cqlhupt.github.io/2024/11/09/AHB%E5%AD%A6%E4%B9%A0/"><meta property="og:site_name" content="Hexo"><meta property="og:description" content="AHB是新一代AMBA总线，旨在满足高性能可综合设计的要求。AHB是支持多主机和高带宽操作的高性能总线。学习AHB对我们设计和使用AMBA总线兼容模块具有重要意义。作为AMBA总线的一部分，在芯片中得到了广泛的应用，学习总线，理解总线能让我们在设计模块时游刃有余。"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://cqlhupt.github.io/img/AHB/ahb_system.png"><meta property="og:image" content="https://cqlhupt.github.io/img/AHB/ahb_slave_interfa.png"><meta property="og:image" content="https://cqlhupt.github.io/img/AHB/ahb_master_interfa.png"><meta property="og:image" content="https://cqlhupt.github.io/img/AHB/ahb_arbiter_interfa.png"><meta property="og:image" content="https://cqlhupt.github.io/img/AHB/ahb_deoder_interfa.png"><meta property="og:image" content="https://cqlhupt.github.io/img/AHB/HSIZE_less_than_bus_width.png"><meta property="og:image" content="https://cqlhupt.github.io/img/AHB/HSIZE_less_than_bus_width_bigendian.png"><meta property="og:image" content="https://cqlhupt.github.io/img/AHB/inr4_burst.png"><meta property="og:image" content="https://cqlhupt.github.io/img/AHB/wrap4_burst.png"><meta property="article:published_time" content="2024-11-09T10:53:17.000Z"><meta property="article:modified_time" content="2024-11-09T13:32:35.193Z"><meta property="article:author" content="John Tony"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/img/AHB/ahb_system.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://cqlhupt.github.io/2024/11/09/AHB%E5%AD%A6%E4%B9%A0/"},"headline":"AHB学习","image":["https://cqlhupt.github.io/img/AHB/ahb_system.png","https://cqlhupt.github.io/img/AHB/ahb_slave_interfa.png","https://cqlhupt.github.io/img/AHB/ahb_master_interfa.png","https://cqlhupt.github.io/img/AHB/ahb_arbiter_interfa.png","https://cqlhupt.github.io/img/AHB/ahb_deoder_interfa.png","https://cqlhupt.github.io/img/AHB/HSIZE_less_than_bus_width.png","https://cqlhupt.github.io/img/AHB/HSIZE_less_than_bus_width_bigendian.png","https://cqlhupt.github.io/img/AHB/inr4_burst.png","https://cqlhupt.github.io/img/AHB/wrap4_burst.png"],"datePublished":"2024-11-09T10:53:17.000Z","dateModified":"2024-11-09T13:32:35.193Z","author":{"@type":"Person","name":"John Tony"},"publisher":{"@type":"Organization","name":"Hexo","logo":{"@type":"ImageObject","url":"https://cqlhupt.github.io/img/logo.svg"}},"description":"AHB是新一代AMBA总线，旨在满足高性能可综合设计的要求。AHB是支持多主机和高带宽操作的高性能总线。学习AHB对我们设计和使用AMBA总线兼容模块具有重要意义。作为AMBA总线的一部分，在芯片中得到了广泛的应用，学习总线，理解总线能让我们在设计模块时游刃有余。"}</script><link rel="canonical" href="https://cqlhupt.github.io/2024/11/09/AHB%E5%AD%A6%E4%B9%A0/"><link rel="icon" href="/img/xuancailizi.jpg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+          Array
+              .from(document.querySelectorAll('.tab-content'))
+              .forEach($tab => {
+                  $tab.classList.add('is-hidden');
+              });
+          Array
+              .from(document.querySelectorAll('.tabs li'))
+              .forEach($tab => {
+                  $tab.classList.remove('is-active');
+              });
+          const $activeTab = document.querySelector(location.hash);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+          const $tabMenu = document.querySelector(`a[href="${location.hash}"]`);
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.svg" alt="Hexo" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2024-11-09T10:53:17.000Z" title="2024/11/9 18:53:17">2024-11-09</time>发表</span><span class="level-item"><time dateTime="2024-11-09T13:32:35.193Z" title="2024/11/9 21:32:35">2024-11-09</time>更新</span><span class="level-item">24 分钟读完 (大约3606个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">AHB学习</h1><div class="content"><p>AHB是新一代AMBA总线，旨在满足高性能可综合设计的要求。AHB是支持多主机和高带宽操作的高性能总线。学习AHB对我们设计和使用AMBA总线兼容模块具有重要意义。作为AMBA总线的一部分，在芯片中得到了广泛的应用，学习总线，理解总线能让我们在设计模块时游刃有余。</p>
+<span id="more"></span>
+
+<h1 id="AHB学习"><a href="#AHB学习" class="headerlink" title="AHB学习"></a>AHB学习</h1><p>AHB为高性能、高时钟频率系统实现了如下特性：</p>
+<ul>
+<li>突发传输</li>
+<li>拆分事务</li>
+<li>单周期总线移交</li>
+<li>单边沿操作</li>
+<li>非三态实现</li>
+<li>数据总线宽度可配置</li>
+</ul>
+<p>AHB和ASB&#x2F;APB的桥接能够非常高效以确保任何现存的设计能够便于集成。</p>
+<p>一个基于AHB总线的系统包含一个或多个主机，典型系统中至少包含处理器和测试接口（作为主机）。然而，DMA和DSP也是常见的总线主机。</p>
+<p>外部存储器接口、APB桥和任何内部存储器都是常见的AHB从机。任何其他的外设都应当被认为是AHB的从机。但是，低带宽外设通常作为APB的从机。</p>
+<p>典型的AHB系统包含如下组件：<br><strong>AHB主机</strong>：主机可以通过提供地址和控制信息来发起读写操作。一次只能有一个主机激活并使用总线。<br><strong>AHB从机</strong>：一个从机在一个指定的地址空间内响应读写请求。从机返回信号给主机表示成功、失败或者等待数据传输。<br><strong>AHB仲裁器</strong>：仲裁器用于确保同一时间只有一个主机使用总线发起数据传输。尽管仲裁协议是固定的，仲裁算法（固定优先级、循环优先级）却可以根据不同的应用场景来实现。一个AHB应只包含一个仲裁器，尽管这在单主机系统中比较琐碎。<br><strong>AHB译码器</strong>：用于在数据传输中进行地址译码并向传输中将会用到的从机发送选择信号。在AHB系统中要求只有一个中央译码器。</p>
+<h1 id="AHB总线结构"><a href="#AHB总线结构" class="headerlink" title="AHB总线结构"></a>AHB总线结构</h1><p>AHB总线系同一般由几个部分组成：主机，仲裁器，地址译码器，从机</p>
+<p><img src="/img/AHB/ahb_system.png" alt="AHB系统结构图" title="AHB系统结构图"></p>
+<p><img src="/img/AHB/ahb_slave_interfa.png" alt="AHB slave接口图" title="AHB slave接口图"></p>
+<p>这里的slave接口中只有一个HREADY，实际上我们需要一个HREADY_out和一个HREADY_in，用于避免在总线移交到另一个slave时上一个slave把HREADY_out拉低而延长传输周期</p>
+<p><img src="/img/AHB/ahb_master_interfa.png" alt="AHB master接口图" title="AHB master接口图"></p>
+<p><img src="/img/AHB/ahb_arbiter_interfa.png" alt="AHB arbiter接口图" title="AHB arbiter接口图"></p>
+<p><img src="/img/AHB/ahb_deoder_interfa.png" alt="AHB decoder接口图" title="AHB decoder接口图"></p>
+<p>实际上master和slave是比较常用的，另外两个基本上只有做总线互联的时候会用到，一般的公司很少进行总线互联的研发，一般有两种情况会研发总线互连，一是公司被制裁，不能购买成熟的总线互联IP，另一种是公司产品本身就是以总线互联IP</p>
+<h1 id="AHB信号列表"><a href="#AHB信号列表" class="headerlink" title="AHB信号列表"></a>AHB信号列表</h1><p>AHB总线信号简述，所有的信号都以H开头以区别系统中其他相似的信号</p>
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th>source</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>HCLK</td>
+<td>时钟源</td>
+<td>时钟，上升沿用于AHB的所有传输</td>
+</tr>
+<tr>
+<td>HRESETn</td>
+<td>复位控制器</td>
+<td>复位，唯一低电平有效的信号，用于复位系统和总线</td>
+</tr>
+<tr>
+<td>HADDR[31:0]</td>
+<td>主机</td>
+<td>地址，32位系统地址总线</td>
+</tr>
+<tr>
+<td>HTRANS[1:0]</td>
+<td>主机</td>
+<td>指示当前传输类型，可以是NONSEQUENTIAL, SEQUENTIAL, IDLE或BUSY</td>
+</tr>
+<tr>
+<td>HWIRTE</td>
+<td>主机</td>
+<td>高表示写传输，低表示读传输</td>
+</tr>
+<tr>
+<td>HSIZE[2:0]</td>
+<td>主机</td>
+<td>指示传输数据的宽度，常为字节(8-bit)、半字(16-bit)或字(32-bit)。协议允许最大值为1024bit，但必须小于等于数据总线宽度。</td>
+</tr>
+<tr>
+<td>HBURST[2:0]</td>
+<td>主机</td>
+<td>指示突发传输的形式，自增（increment）和环回（warp）都支持4、8、16拍传输。</td>
+</tr>
+<tr>
+<td>HPROT[3:0]</td>
+<td>主机</td>
+<td>保护控制信号提供关于总线接入的附加信息，并主要用于希望实现某种级别保护的模块。信号指示传输是否是操作码拾取（opcode fetch）或数据访问（data access），以及传输是特权模式（privileged mode）还是用户模式（user mode）。对于带有MMU的总线主机来说还用于指示当前访问的数据是否可以缓存（cacheable）或缓冲（bufferable）</td>
+</tr>
+<tr>
+<td>HWDATA[31:0]</td>
+<td>主机</td>
+<td>写数据总线用于写操作时主机向从机传输数据。推荐最小的位宽为32位。但是也很容易为了更高的带宽而进行扩展。</td>
+</tr>
+<tr>
+<td>HSELx</td>
+<td>译码器</td>
+<td>每个AHB从机都拥有自己的选择信号，用于指示当前传输的目标是否是本从机。由简单的组合逻辑地址译码得到</td>
+</tr>
+<tr>
+<td>HRDATA[31:0]</td>
+<td>从机</td>
+<td>读数据总线用于写操作时从机向主机传输数据。推荐最小的位宽为32位。但是也很容易为了更高的带宽而进行扩展。</td>
+</tr>
+<tr>
+<td>HREADY</td>
+<td>从机</td>
+<td>高表示总线上的一次传输结束。为了扩展一次传输，该信号可被拉低。<strong>总线上的从机要求HREADY既有输入端口，又有输出端口。</strong></td>
+</tr>
+<tr>
+<td>HRESP[1:0]</td>
+<td>从机</td>
+<td>传输响应提供传输状态的额外信息。四种不同的响应为：OKAY，ERROR，RETRY，SPLIT</td>
+</tr>
+</tbody></table>
+<p>AHB中还有一些信号用于支持多主机操作。这些仲裁信号的多数都是点到点的专用信号，表中后缀x表示信号来自模块x，如HBUSREQarm，HBUSREQdma等。</p>
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th>source</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>HBUSREQx</td>
+<td>主机</td>
+<td>来自于主机x到仲裁器，用于表示主机请求使用总线。每个主机都有一个HBUSREQx，一个系统中最多有16个主机。</td>
+</tr>
+<tr>
+<td>HLOCKx</td>
+<td>主机</td>
+<td>拉高表示主机请求执行总线锁定访问（locked access），而其他主机在该信号拉低之前不能获得总线。</td>
+</tr>
+<tr>
+<td>HGRANTx</td>
+<td>仲裁器</td>
+<td>表示主机x当前拥有最高的总线优先级。地址&#x2F;控制信号的所有权在一次传输以HREADY为高结束时改变，所以当HREADY（上一次访问结束）和HGRANTx都为高时获得总线。</td>
+</tr>
+<tr>
+<td>HMASTER[3:0]</td>
+<td>仲裁器</td>
+<td>这个信号用于表明哪个主机正在进行传输，并被支持SPLIT传输的从机用于判断哪个主机正在尝试访问。HMASTER的时序与地址和控制信号的时序定义在一起。</td>
+</tr>
+<tr>
+<td>HMASTERLOCK</td>
+<td>仲裁器</td>
+<td>表示当前主机进行的是锁定序列传输。具有与HMASTER一样的时序</td>
+</tr>
+<tr>
+<td>HSPLITx[15:0]</td>
+<td>从机</td>
+<td>用于从机到仲裁器指示哪个主机需要允许事务拆分重传。每个位与一个单一的主机绑定。</td>
+</tr>
+</tbody></table>
+<h1 id="传输类型、突发类型和响应类型"><a href="#传输类型、突发类型和响应类型" class="headerlink" title="传输类型、突发类型和响应类型"></a>传输类型、突发类型和响应类型</h1><h2 id="传输类型（Transfer-type）"><a href="#传输类型（Transfer-type）" class="headerlink" title="传输类型（Transfer type）"></a>传输类型（Transfer type）</h2><p>传输类型是HTRANS[1:0]信号的值编码，具体信息如下</p>
+<table>
+<thead>
+<tr>
+<th>HTRANS[1:0]</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2’b00</td>
+<td>IDLE</td>
+<td>空闲状态，表示主机获得总线，但不想传输数据，从机在第一个IDLE周期时可以拉低HREADY向主机表示没有准备好接收该IDLE传输，一旦slave接收了一个IDLE，下一个周期无论HTRANS是什么，slave都不能拉低HREADY，必须立即接收，也就是slave当前周期接收了IDLE则下一个周期HREADY必须拉高，并且HRESP必须为OKAY</td>
+</tr>
+<tr>
+<td>2’b01</td>
+<td>BUSY</td>
+<td>主机忙，表示主机没有准备好在下一个周期进行数据传输，slave可以在第一个BUSY周期时拉低HREADY，表示没有准备好接收该BUSY传输，一旦slave接收了一个BUSY，下一个周期无论HTRANS是什么，slave都不能拉低HREADY，必须立即接收，也就是slave当前周期接收了BUSY则下一个周期HREADY必须拉高，并且HRESP必须为OKAY</td>
+</tr>
+<tr>
+<td>2’b10</td>
+<td>NONSEQ</td>
+<td>非连续传输，表示开始一个新传输，理论上认为该传输与前一个周期的传输无关，表示下一个周期进行一次新的传输，根据HBURST的不同而后续跟着不同数量的SEQ传输，如果HBURST是SINGLE，则没有后续的SEQ</td>
+</tr>
+<tr>
+<td>2’b11</td>
+<td>SEQ</td>
+<td>连续传输，表示与前面的传输地址相关的连续的传输，具体的地址计算需要根据HBURST进行计算，当然slave也可以不计算，因为master每个周期都会给出地址</td>
+</tr>
+</tbody></table>
+<h2 id="突发类型（Burst-Type）"><a href="#突发类型（Burst-Type）" class="headerlink" title="突发类型（Burst Type）"></a>突发类型（Burst Type）</h2><p>传输类型是HBURST[2:0]信号的值编码，具体信息如下</p>
+<table>
+<thead>
+<tr>
+<th>HBURST[2:0]</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>3’b000</td>
+<td>SINGLE</td>
+<td>单次传输，NONSEQ后续没有SEQ，SINGLE的NONSEQ之后下一个周期不能是BUSY</td>
+</tr>
+<tr>
+<td>3’b001</td>
+<td>INCR</td>
+<td>不指定长度的地址递增传输，传输数据的数量没有明确限制，但不能超过1KB边界</td>
+</tr>
+<tr>
+<td>3’b010</td>
+<td>WRAP4</td>
+<td>4拍地址环回传输</td>
+</tr>
+<tr>
+<td>3’b011</td>
+<td>INCR4</td>
+<td>4拍地址递增传输</td>
+</tr>
+<tr>
+<td>3’b100</td>
+<td>WRAP8</td>
+<td>8拍地址环回传输</td>
+</tr>
+<tr>
+<td>3’b101</td>
+<td>INCR8</td>
+<td>8拍地址递增传输</td>
+</tr>
+<tr>
+<td>3’b110</td>
+<td>WRAP16</td>
+<td>16拍地址环回传输</td>
+</tr>
+<tr>
+<td>3’b111</td>
+<td>INCR16</td>
+<td>16拍地址递增传输</td>
+</tr>
+</tbody></table>
+<h2 id="slave响应类型（Response-Type）"><a href="#slave响应类型（Response-Type）" class="headerlink" title="slave响应类型（Response Type）"></a>slave响应类型（Response Type）</h2><p>slave在传输过程中需要向master传输一些响应信息，表示当前数据的结果和slave的状态</p>
+<table>
+<thead>
+<tr>
+<th>HRESP[1:0]</th>
+<th>响应</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2’b00</td>
+<td>OKAY</td>
+<td>在HREADY为1时，表示数据传输成功完成，也用于非另外三种响应的HREADY为0时</td>
+</tr>
+<tr>
+<td>2’b01</td>
+<td>ERROR</td>
+<td>用于表示当前有错误产生，slave本身和传输之一出现了问题，用于告诉master有错误出现，并且传输失败了；一次ERROR必须通过两个周期传输，第一个周期HREADY为0（为了让master做好准备），第二个周期HREADY为1</td>
+</tr>
+<tr>
+<td>2’b10</td>
+<td>RETRY</td>
+<td>slave告诉master当前传输未完成，master应该重试，直到传输成功；一次RETRY必须通过两个周期传输，第一个周期HREADY为0（为了让master做好准备），第二个周期HREADY为1</td>
+</tr>
+<tr>
+<td>2’b11</td>
+<td>SPLIT</td>
+<td>slave告诉master当前传输较长一段时间不能完成，master需要结束当前传输，等待下一次拿到总线再重试，slave在能够完成数据传输时会用HSPLITx信号通知仲裁器，让仲裁器将总线交给对应的master，当然如果一个更高优先级的传输正在进行时总线不会立即移交；一次SPLIT必须通过两个周期传输，第一个周期HREADY为0（为了让master做好准备），第二个周期HREADY为1</td>
+</tr>
+</tbody></table>
+<p>RETRY和SPLIT两种模式其实用的很少，因为这会增加slave的复杂程度，也会增加整个访问流程的复杂度。</p>
+<h2 id="HSIZE和地址计算"><a href="#HSIZE和地址计算" class="headerlink" title="HSIZE和地址计算"></a>HSIZE和地址计算</h2><p>HSIZE信号决定了一次突发传输过程中的数据位宽，HSIZE可以指定小于等于数据总线位宽的数据宽度</p>
+<table>
+<thead>
+<tr>
+<th>HSIZE[2:0]</th>
+<th>大小</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>3’b000</td>
+<td>8 bits</td>
+<td>1 Byte</td>
+</tr>
+<tr>
+<td>3’b001</td>
+<td>16 bits</td>
+<td>1 Halfword</td>
+</tr>
+<tr>
+<td>3’b010</td>
+<td>32 bits</td>
+<td>1 Word</td>
+</tr>
+<tr>
+<td>3’b011</td>
+<td>64 bits</td>
+<td>-</td>
+</tr>
+<tr>
+<td>3’b100</td>
+<td>128 bits</td>
+<td>4 word line</td>
+</tr>
+<tr>
+<td>3’b101</td>
+<td>256 bits</td>
+<td>8 word line</td>
+</tr>
+<tr>
+<td>3’b110</td>
+<td>512 bits</td>
+<td>-</td>
+</tr>
+<tr>
+<td>3’b111</td>
+<td>1024 bits</td>
+<td>-</td>
+</tr>
+</tbody></table>
+<p>如果数据总线位宽小于等于64位，HSIZE最高位可以不使用，HSIZE指定的位宽也是AHB可以支持的数据总线位宽。</p>
+<p>如果HSIZE小于数据总线位宽时要区分大小端，我们来看一下，以下是AHB总线spec的例子，数据总线为32 bits</p>
+<p><img src="/img/AHB/HSIZE_less_than_bus_width.png" alt="小端非完整总线位宽传输" title="小端非完整总线位宽传输"></p>
+<p>小端传输时如果HSIZE小于总线位宽，低位字节先传输，地址的增加按照HSIZE大小增加，低位字节的地址小于高位字节</p>
+<p><img src="/img/AHB/HSIZE_less_than_bus_width_bigendian.png" alt="大端非完整总线位宽传输" title="大端非完整总线位宽传输"></p>
+<p>大端传输时如果HSIZE小于总线位宽，高位字节先传输，地址的增加按照HSIZE大小增加，高位字节的地址小于低位字节</p>
+<p>WARP传输的地址计算也是一个重要的环节，如果你的设计需要支持环回访问，需要计算出正确的地址：</p>
+<p>根据spec的说法，wrap的环回地址边界是HSIZE×HBURST，比如：</p>
+<ol>
+<li>HBURST &#x3D; WRAP4, HSIZE &#x3D; Halfword, WRAP address &#x3D; 4×2 &#x3D; 8</li>
+<li>HBURST &#x3D; WRAP8, HSIZE &#x3D; Word, WRAP address &#x3D; 8 × 3 &#x3D; 32</li>
+</ol>
+<h2 id="传输保护"><a href="#传输保护" class="headerlink" title="传输保护"></a>传输保护</h2><p>HPROT信号为传输提供了一些保护控制，包括cacheable, bufferable, privileged, data&#x2F;opcode</p>
+<table>
+<thead>
+<tr>
+<th>HPROT[3]</th>
+<th>HPROT[2]</th>
+<th>HPROT[1]</th>
+<th>HPROT[0]</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>0</td>
+<td>操作码拾取，对CPU而言</td>
+</tr>
+<tr>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>1</td>
+<td>数据访问，对CPU及所有其他传输</td>
+</tr>
+<tr>
+<td>-</td>
+<td>-</td>
+<td>0</td>
+<td>-</td>
+<td>用户访问</td>
+</tr>
+<tr>
+<td>-</td>
+<td>-</td>
+<td>1</td>
+<td>-</td>
+<td>优先访问</td>
+</tr>
+<tr>
+<td>-</td>
+<td>0</td>
+<td>-</td>
+<td>-</td>
+<td>Not bufferable，表示不可以在bus interconnect部分中被buffer</td>
+</tr>
+<tr>
+<td>-</td>
+<td>1</td>
+<td>-</td>
+<td>-</td>
+<td>Bufferable，表示可以在bus interconnect部分中被buffer</td>
+</tr>
+<tr>
+<td>0</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>Not cacheable，表示不可以在接收模块的cache中存储</td>
+</tr>
+<tr>
+<td>1</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td>Cacheable，表示可以在接收模块的cache中存储</td>
+</tr>
+</tbody></table>
+<h1 id="基本的传输波形"><a href="#基本的传输波形" class="headerlink" title="基本的传输波形"></a>基本的传输波形</h1><h2 id="INCR传输"><a href="#INCR传输" class="headerlink" title="INCR传输"></a>INCR传输</h2><p><img src="/img/AHB/inr4_burst.png" alt="INCR4传输" title="INCR4传输"></p>
+<p>INCR传输的地址都是按照HSIZE的大小递增的，具体的传输字节顺序可以参考前述的HSIZE章节。传输由1个NONSEQ和0个或多个SEQ传输组成，传输以下一个burst的NONSEQ或者IDLE结束，传输可以提前结束。</p>
+<h2 id="WRAP传输"><a href="#WRAP传输" class="headerlink" title="WRAP传输"></a>WRAP传输</h2><p><img src="/img/AHB/wrap4_burst.png" alt="WRAP4传输" title="WRAP4传输"></p>
+<p>WRAP传输的地址都是按照HSIZE的大小递增的，一直到环回地址边界时回到上一个边界处，具体的传输字节顺序可以参考前述的HSIZE章节。传输由1个NONSEQ和0个或多个SEQ传输组成，传输以下一个burst的NONSEQ或者IDLE结束，传输可以提前结束。</p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>AHB学习</p><p><a href="https://cqlhupt.github.io/2024/11/09/AHB学习/">https://cqlhupt.github.io/2024/11/09/AHB学习/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>John Tony</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2024-11-09</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2024-11-09</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><!--!--></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3><div class="buttons is-centered"><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>支付宝</span><span class="qrcode"><img src="/img/alipay.jpg" alt="支付宝"></span></a><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>微信</span><span class="qrcode"><img src="/img/wechatpay.png" alt="微信"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2024/11/06/Python%E8%8E%B7%E5%8F%96BLE%E5%B9%BF%E6%92%AD/"><span class="level-item">Python获取BLE广播</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">评论</h3><script src="https://utteranc.es/client.js" repo="cqlhupt/cqlhupt.github.io" issue-term="pathname" label="some-issue-label" theme="github-light" crossorigin="anonymous" async></script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="/img/xuancailizi.jpg" alt="Jhon Tony"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">Jhon Tony</p><p class="is-size-6 is-block">Jhon Tony&#039;s Blog</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>Galaxy, Universe</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">9</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">0</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">0</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/cqlhupt" target="_blank" rel="noopener">关注我</a></div><div class="level is-mobile is-multiline"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/cqlhupt"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Facebook" href="https://facebook.com"><i class="fab fa-facebook"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Twitter" href="https://twitter.com"><i class="fab fa-twitter"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Dribbble" href="https://dribbble.com"><i class="fab fa-dribbble"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="RSS" href="/"><i class="fas fa-rss"></i></a></div></div></div><!--!--><div class="card widget" data-type="links"><div class="card-content"><div class="menu"><h3 class="menu-label">链接</h3><ul class="menu-list"><li><a class="level is-mobile" href="https://hexo.io" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">Hexo</span></span><span class="level-right"><span class="level-item tag">hexo.io</span></span></a></li><li><a class="level is-mobile" href="https://bulma.io" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">Bulma</span></span><span class="level-right"><span class="level-item tag">bulma.io</span></span></a></li></ul></div></div></div><!--!--><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2024-11-09T10:53:17.000Z">2024-11-09</time></p><p class="title"><a href="/2024/11/09/AHB%E5%AD%A6%E4%B9%A0/">AHB学习</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2024-11-06T13:10:28.000Z">2024-11-06</time></p><p class="title"><a href="/2024/11/06/Python%E8%8E%B7%E5%8F%96BLE%E5%B9%BF%E6%92%AD/">Python获取BLE广播</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2024-11-03T04:27:01.000Z">2024-11-03</time></p><p class="title"><a href="/2024/11/03/ESP-IDF%E5%BB%BA%E7%AB%8BArduino%E7%BB%84%E4%BB%B6%E9%A1%B9%E7%9B%AE/">ESP-IDF建立Arduino组件项目</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2024-11-03T01:45:40.000Z">2024-11-03</time></p><p class="title"><a href="/2024/11/03/Hexo%E5%8D%9A%E5%AE%A2%E8%BF%81%E7%A7%BB%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%8C%87%E5%8D%97/">Hexo博客迁移问题解决指南</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2024-11-01T09:40:56.000Z">2024-11-01</time></p><p class="title"><a href="/2024/11/01/ESP-IDF-environment-setup/">ESP-IDF环境搭建</a></p></div></article></div></div><div class="card widget" data-type="archives"><div class="card-content"><div class="menu"><h3 class="menu-label">归档</h3><ul class="menu-list"><li><a class="level is-mobile" href="/archives/2024/11/"><span class="level-start"><span class="level-item">十一月 2024</span></span><span class="level-end"><span class="level-item tag">5</span></span></a></li><li><a class="level is-mobile" href="/archives/2023/08/"><span class="level-start"><span class="level-item">八月 2023</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2022/08/"><span class="level-start"><span class="level-item">八月 2022</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2022/05/"><span class="level-start"><span class="level-item">五月 2022</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2022/04/"><span class="level-start"><span class="level-item">四月 2022</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></div></div></div><!--!--><div class="card widget" data-type="subscribe-email"><div class="card-content"><div class="menu"><h3 class="menu-label">订阅更新</h3><form action="https://feedburner.google.com/fb/a/mailverify" method="post" target="popupwindow" onsubmit="window.open(&#039;https://feedburner.google.com/fb/a/mailverify?uri=&#039;,&#039;popupwindow&#039;,&#039;scrollbars=yes,width=550,height=520&#039;);return true"><input type="hidden" value="" name="uri"><input type="hidden" name="loc" value="en_US"><div class="field has-addons"><div class="control has-icons-left is-expanded"><input class="input" name="email" type="email" placeholder="Email"><span class="icon is-small is-left"><i class="fas fa-envelope"></i></span></div><div class="control"><input class="button" type="submit" value="订阅"></div></div></form></div></div></div><div class="card widget" data-type="subscribe-email"><div class="card-content"><div class="menu"><h3 class="menu-label">follow.it</h3><form action="" method="post" target="_blank"><div class="field has-addons"><div class="control has-icons-left is-expanded"><input class="input" name="email" type="email" placeholder="Email"><span class="icon is-small is-left"><i class="fas fa-envelope"></i></span></div><div class="control"><input class="button" type="submit" value="订阅"></div></div></form></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.svg" alt="Hexo" height="28"></a><p class="is-size-7"><span>&copy; 2024 John Tony</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-CN");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>
