@@ -14,6 +14,8 @@ tags:
   * public文件夹
   * 配置git global
   * 配置github公私钥
+  * git timeout fatal
+  * icarus主题打开Latex支持
 * 结语
 
 # 可迁移Hexo
@@ -131,5 +133,45 @@ ssh-agent bash
 ssh-add "你的私钥文件地址"
 ```
 随后即可开始进行博客部署和资源的提交
+
+## git timeout fatal
+
+在执行git push/pull时出现报错信息：
+```shell
+ssh: connect to host github.com port 22: Connection refused
+fatal: Could not read from remote repository.
+​
+Please make sure you have the correct access rights
+and the repository exists.
+```
+原因：GitHub的22端口（ssh默认端口）被屏蔽
+
+解决方案：修改访问端口为443（https默认端口）
+
+在用户目录下的.ssh文件夹中找到config文件（没有的话请新建一个），配置如下内容
+```shell
+Host github.com
+HostName ssh.github.com 
+User git
+Port 443
+```
+可以使用如下命令进行测试：
+
+```shell
+$ ssh -T git@github.com
+Hi xxxxx! You've successfully authenticated, but GitHub does not
+provide shell access.
+$ 
+```
+
+## icarus主题打开Latex支持
+
+在你的主题配置文件中增加如下配置：
+```yml
+plugins:
+    mathjax: true
+```
+如果你使用的是主题默认配置文件，只需要在该默认文件中找到mathjax项，将其从false改成true即可
+
 # 结语
 保持更新确实是一件很困难的事情，尤其是更新这件事本身对于自己可有可无的时候，毕竟人类的本质是鸽子和复读机。希望以后能够按时更新，记录自己的成长和生活。

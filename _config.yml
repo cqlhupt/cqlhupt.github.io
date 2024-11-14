@@ -91,6 +91,17 @@ deploy:
 # adminUser: cqlhupt #指定可初始化评论账户
 # distractionFreeMode: true
 
+# math:
+#     enable: true
+#     specific: false
+#     engine: mathjax
+
+# mathjax:
+#   enable: true
+#   per_page: false
+plugins:
+    mathjax: true
+
 comment:
     type: utterances
     repo: cqlhupt/cqlhupt.github.io
