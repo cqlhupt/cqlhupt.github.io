@@ -1,9 +1,9 @@
 ---
-title: ONFI-SCA接口（二）
+title: NAND SCA接口（二）
 date: 2024-11-30 11:21:16
 tags:
 ---
-接上一篇[ONFI-SCA接口（一）](https://cqlhupt.github.io/2024/11/23/ONFI-SCA%E6%8E%A5%E5%8F%A3/)的内容，继续讲JESD230G的第十章
+接上一篇[NAND SCA接口（一）](https://cqlhupt.github.io/2024/11/23/ONFI-SCA%E6%8E%A5%E5%8F%A3/)的内容，继续讲JESD230G的第十章
 <!-- more -->
 
 # LUN选择(LUNSel)包 (NAND可选支持)

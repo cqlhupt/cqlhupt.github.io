@@ -161,4 +161,4 @@ SCP/SCT的发送时间也有写数据时一样的问题，只能在数据完全�
 # 小结
 介绍了部分JESD230G第10章的内容，尽请期待后续相关的内容更新，感谢您的阅读，希望对您有所帮助
 
-下一篇直达链接[ONFI-SCA接口（二）](https://cqlhupt.github.io/2024/11/30/ONFI-SCA%E6%8E%A5%E5%8F%A32/)
+下一篇直达链接[NAND SCA接口（二）](https://cqlhupt.github.io/2024/11/30/ONFI-SCA%E6%8E%A5%E5%8F%A32/)
