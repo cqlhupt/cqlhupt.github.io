@@ -16,6 +16,7 @@ tags:
   * 配置github公私钥
   * git timeout fatal
   * icarus主题打开Latex支持
+  * 直接从其他计算机复制博客文件夹
 * 结语
 
 # 可迁移Hexo
@@ -172,6 +173,29 @@ plugins:
     mathjax: true
 ```
 如果你使用的是主题默认配置文件，只需要在该默认文件中找到mathjax项，将其从false改成true即可
+
+## 直接从其他计算机复制博客文件夹
+
+当我们更换计算机或者重装系统后，想复制以前的博客备份文件夹过来直接使用时，可能会遇到如下问题：
+```shell
+admin@DESKTOP-TNI5ROV MINGW64 /d/git/rt-thread/rt-thread_pm2
+$ git log
+fatal: detected dubious ownership in repository at 'D:/git/rt-thread/rt-thread_pm2'
+'D:/git/rt-thread/rt-thread_pm2' is owned by:
+        'S-1-5-21-1045045257-1974506225-3199486363-500'
+but the current user is:
+        'S-1-5-21-1045045257-1974506225-3199486363-1001'
+To add an exception for this directory, call:
+
+        git config --global --add safe.directory D:/git/rt-thread/rt-thread_pm2
+```
+
+这是由于这个文件夹的所有者不是当前我们登录的用户，我们需要修改这个文件夹及其内部的所有文件/文件夹的所有者为当前我们登录的账户
+
+![修改文件夹所有者1](/img/hexo_mig/change_owner_of_dictory1.png "修改文件夹所有者1")
+![修改文件夹所有者2](/img/hexo_mig/change_owner_of_dictory2.png "修改文件夹所有者2")
+
+根据以上两张图中的步骤修改你的博客文件夹所有者，注意第9步中的选框是在第8步结束后才会出现的，并且第9和第10步必须选上才能生效
 
 # 结语
 保持更新确实是一件很困难的事情，尤其是更新这件事本身对于自己可有可无的时候，毕竟人类的本质是鸽子和复读机。希望以后能够按时更新，记录自己的成长和生活。
