@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="zh"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>AOSP构建 - Hexo</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="Jhon Tony"><meta name="msapplication-TileImage" content="/img/xuancailizi.jpg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Jhon Tony"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="Android系统无疑给我们的生活带来了深远的影响，目前我们的移动设备使用的操作系统只剩下iOS和Android两个。Android在嵌入式设备中也得到广泛的应用，比如你可以看见各种广告机，POS机等设备也在使用Android系统。提到Android就不得不提到Google，一家在全球具有相当影响力的公司，它在2005年收购了Android系统，并在后续将其开源，使得各个手机制造商能够免费获取到A"><meta property="og:type" content="blog"><meta property="og:title" content="AOSP构建"><meta property="og:url" content="https://cqlhupt.github.io/2025/03/08/AOSP%E6%9E%84%E5%BB%BA/"><meta property="og:site_name" content="Hexo"><meta property="og:description" content="Android系统无疑给我们的生活带来了深远的影响，目前我们的移动设备使用的操作系统只剩下iOS和Android两个。Android在嵌入式设备中也得到广泛的应用，比如你可以看见各种广告机，POS机等设备也在使用Android系统。提到Android就不得不提到Google，一家在全球具有相当影响力的公司，它在2005年收购了Android系统，并在后续将其开源，使得各个手机制造商能够免费获取到A"><meta property="og:locale" content="zh_CN"><meta property="og:image" content="https://cqlhupt.github.io/img/aosp_build/android15_emulator_screen_shoot.png"><meta property="og:image" content="https://cqlhupt.github.io/img/aosp_build/android15_emulator_log.png"><meta property="article:published_time" content="2025-03-08T12:47:20.000Z"><meta property="article:modified_time" content="2025-03-09T05:09:40.938Z"><meta property="article:author" content="John Tony"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/img/aosp_build/android15_emulator_screen_shoot.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://cqlhupt.github.io/2025/03/08/AOSP%E6%9E%84%E5%BB%BA/"},"headline":"AOSP构建","image":["https://cqlhupt.github.io/img/aosp_build/android15_emulator_screen_shoot.png","https://cqlhupt.github.io/img/aosp_build/android15_emulator_log.png"],"datePublished":"2025-03-08T12:47:20.000Z","dateModified":"2025-03-09T05:09:40.938Z","author":{"@type":"Person","name":"John Tony"},"publisher":{"@type":"Organization","name":"Hexo","logo":{"@type":"ImageObject","url":"https://cqlhupt.github.io/img/logo.svg"}},"description":"Android系统无疑给我们的生活带来了深远的影响，目前我们的移动设备使用的操作系统只剩下iOS和Android两个。Android在嵌入式设备中也得到广泛的应用，比如你可以看见各种广告机，POS机等设备也在使用Android系统。提到Android就不得不提到Google，一家在全球具有相当影响力的公司，它在2005年收购了Android系统，并在后续将其开源，使得各个手机制造商能够免费获取到A"}</script><link rel="canonical" href="https://cqlhupt.github.io/2025/03/08/AOSP%E6%9E%84%E5%BB%BA/"><link rel="icon" href="/img/xuancailizi.jpg"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" defer></script><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><style>.pace{-webkit-pointer-events:none;pointer-events:none;-webkit-user-select:none;-moz-user-select:none;user-select:none}.pace-inactive{display:none}.pace .pace-progress{background:#3273dc;position:fixed;z-index:2000;top:0;right:100%;width:100%;height:2px}</style><script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js"></script><!--!--><!--!--><!-- hexo injector head_end start --><script>
+  (function () {
+      function switchTab() {
+          if (!location.hash) {
+            return;
+          }
+          Array
+              .from(document.querySelectorAll('.tab-content'))
+              .forEach($tab => {
+                  $tab.classList.add('is-hidden');
+              });
+          Array
+              .from(document.querySelectorAll('.tabs li'))
+              .forEach($tab => {
+                  $tab.classList.remove('is-active');
+              });
+          const $activeTab = document.querySelector(location.hash);
+          if ($activeTab) {
+              $activeTab.classList.remove('is-hidden');
+          }
+          const $tabMenu = document.querySelector(`a[href="${location.hash}"]`);
+          if ($tabMenu) {
+              $tabMenu.parentElement.classList.add('is-active');
+          }
+      }
+      switchTab();
+      window.addEventListener('hashchange', switchTab, false);
+  })();
+  </script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body class="is-2-column"><nav class="navbar navbar-main"><div class="container navbar-container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/logo.svg" alt="Hexo" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">Home</a><a class="navbar-item" href="/archives">Archives</a><a class="navbar-item" href="/categories">Categories</a><a class="navbar-item" href="/tags">Tags</a><a class="navbar-item" href="/about">About</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a><a class="navbar-item search" title="搜索" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-8-widescreen"><div class="card"><article class="card-content article" role="article"><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><time dateTime="2025-03-08T12:47:20.000Z" title="2025/3/8 20:47:20">2025-03-08</time>发表</span><span class="level-item"><time dateTime="2025-03-09T05:09:40.938Z" title="2025/3/9 13:09:40">2025-03-09</time>更新</span><span class="level-item">21 分钟读完 (大约3176个字)</span><span class="level-item" id="busuanzi_container_page_pv"><span id="busuanzi_value_page_pv">0</span>次访问</span></div></div><h1 class="title is-3 is-size-4-mobile">AOSP构建</h1><div class="content"><p>Android系统无疑给我们的生活带来了深远的影响，目前我们的移动设备使用的操作系统只剩下iOS和Android两个。Android在嵌入式设备中也得到广泛的应用，比如你可以看见各种广告机，POS机等设备也在使用Android系统。提到Android就不得不提到Google，一家在全球具有相当影响力的公司，它在2005年收购了Android系统，并在后续将其开源，使得各个手机制造商能够免费获取到Android源代码，并进行自己的修改，也催生了如今精彩的移动互联网世界。我无意在此讨论关于Google与Oracle的纠纷，以及当年阿里巴巴的YunOS如何衰落，目前关于Harmony的争端，抑或是Nokia和微软的WP系统的兴衰。本文的目的是从更深的层面认识我们广泛应用的操作系统，并尝试构建它。</p>
+<span id="more"></span>
+
+<h1 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h1><p>在一开始准备尝试构建Android的时候，在互联网上找到的教程中提到的资源需求还是让我有点望而却步的，比如Google提到的硬件要求：</p>
+<ul>
+<li><p>一个 64 位 x86 系统。</p>
+<p>  注意：您可以在 32 位系统上编译低于 2.3.x 的 AOSP 版本。</p>
+</li>
+<li><p>如果要检出和构建代码，至少需要 400 GB 可用磁盘空间（250 GB 空间用于检出代码 + 150 GB 空间用于构建代码）。</p>
+<p>  注意：如果您要检出镜像，则需要更多空间，因为完整的 Android 开源项目 (AOSP) 镜像包含所有使用过的 Git 代码库。</p>
+</li>
+<li><p>至少 64 GB RAM。Google 使用 72 核机器和 64 GB RAM 来构建 Android。采用此硬件配置时，一个完整的 Android build 大约需要 40 分钟；Android 增量 build 大约需要几分钟的时间。相比之下，使用 6 核机器和 64 GB RAM 构建一个完整 build 大约需要 6 个小时。</p>
+</li>
+</ul>
+<p>第三条配置要求在普通的个人PC上不是很容易实现，一开始我是有考虑过购买一台服务器的，不过一方面考虑到硬件成本，另一方面也要考虑到后期使用成本，就暂时放弃买服务器的想法了，不过既然有困难我们就要解决困难，资源有限我们可以用时间来弥补，我直接使用了我的笔记本来进行构建，实际尝试后发现情况并没有想象中的那么糟糕，具体配置如下：</p>
+<ol>
+<li>联想拯救者Y7000 2018款</li>
+<li>CPU: Intel i7-8750H 6核12线程</li>
+<li>RAM: 8GB + 16GB 非对称双通道DDR4 2666</li>
+<li>Disk: 忆联128G SSD + 希捷 2T HDD + 西数 1T SSD</li>
+<li>System: Kali Linux 2024</li>
+</ol>
+<p>其中RAM中16GB是大学的时候购买的，为了编译AOSP，本次购买了一个西数的SN770 1T SSD，用于存储AOSP代码和构建AOSP。戏剧化的一点是，在我购买硬盘后没几天，西数就宣布彻底退出SSD市场，所有SSD相关业务将由SanDisk接手，看起来西数的做法和Intel拆分Altera很像，想必和Kioxia合并的方案被Hynix否决有一定的关系。</p>
+<p>加装硬盘时遇到一个小插曲，拆开电脑发现根本没有多余的硬盘位给我加装硬盘，我之前认为空的一个硬盘位置上实际插着我的Windows系统盘（忆联 128G SSD），不得已又购买了一个移动硬盘盒来进行硬盘扩展，不过移动硬盘盒要过几天才能到，所以我先将系统盘拆下来然后把新硬盘插上去进行AOSP代码检出和构建尝试，主要是因为移动硬盘盒只有PCIe x2，而主板上的硬盘位则是PCIe x4的，理论上具有更高的数据带宽（这可能是后续编译时间短于预期的原因之一），本来准备后续直接将Windows系统盘放在移动硬盘盒上启动，后来发现不行，只能把新硬盘和Windows系统盘的位置进行交换，不过好在那时我已经在PCIe x4接口上完成了AOSP的首次构建。由于Windows系统盘只有128G，所以我当时装Linux时就将系统装在了机械硬盘上，这也是为什么我将Windows系统盘拔出后仍可以进入Linux完成AOSP构建。</p>
+<h1 id="新硬盘分区"><a href="#新硬盘分区" class="headerlink" title="新硬盘分区"></a>新硬盘分区</h1><p>强烈建议在SSD上构建AOSP，HDD实在太慢。</p>
+<p>我对新硬盘的分区是这样的：</p>
+<ol>
+<li>460GB 用于AOSP代码存储和构建，使用ext4文件系统，因为有人提到如果使用NTFS可能会失败，不过我没有进行验证</li>
+<li>40GB 挂在为Linux swap分区，用于弥补RAM的不足，不过我没有监控构建过程中的swap占用情况，不知道是否真的需要40GB</li>
+<li>剩下的空间保留，等待后续使用</li>
+</ol>
+<p>根据我的分区使用情况来看，其实购买512G的硬盘应该也是足够的，不过现在SSD价格也相当便宜了，所以可以买大一点</p>
+<h1 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h1><p>上文提到，我使用的是Kali Linux，实际上Google官方和绝大多数网络教程都使用的是Ubuntu，也有部分使用Debian的，不过Kali也是一个基于Debian的发行版，所以也是可以的，另一方面，如果你不想安装物理Linux系统，也可以考虑使用虚拟机或者WSL，不过这两者可能存在一些额外的资源开销，所以最推荐的还是使用Linux物理机。</p>
+<h2 id="依赖安装"><a href="#依赖安装" class="headerlink" title="依赖安装"></a>依赖安装</h2><p>根据Google官方教程安装依赖：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt-get install git-core gnupg flex bison build-essential zip curl zlib1g-dev libc6-dev-i386 x11proto-core-dev libx11-dev lib32z1-dev libgl1-mesa-dev libxml2-utils xsltproc unzip fontconfig -y</span><br></pre></td></tr></table></figure>
+
+<p>在更早的Android版本中，你可能需要使用到更多的依赖，比如以下命令中提到的依赖：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install unzip zip libssl-dev  libffi-dev gnupg flex bison gperf build-essential  curl zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 x11proto-core-dev libx11-dev libz-dev ccache libgl1-mesa-dev libxml2-utils xsltproc git python2 openjdk-8-jdk aptitude repo libncurses5-dev -y </span><br><span class="line">sudo apt install lib32ncurses5-dev </span><br><span class="line">sudo aptitude install libncurses5-dev -y</span><br></pre></td></tr></table></figure>
+<p>两个单独列出的依赖在最新的系统中已经不存在，所以如果你需要编译早期版本Android的话，需要考虑使用旧版的操作系统，如Ubuntu18</p>
+<h2 id="信息配置和目录创建"><a href="#信息配置和目录创建" class="headerlink" title="信息配置和目录创建"></a>信息配置和目录创建</h2><p>执行如下命令配置git信息：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.email &quot;你的email&quot;</span><br><span class="line">git config --global user.name &quot;你的用户名&quot;</span><br></pre></td></tr></table></figure>
+<p>用户名和email不需要真实信息，只用于表明我们的身份，如果没有配置，后续进行代码同步时会报错</p>
+<p>执行如下命令创建工作目录：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir android</span><br><span class="line">mkdir android/bin</span><br><span class="line">cd android/bin</span><br></pre></td></tr></table></figure>
+<p>为了更好的管理项目，建议新建一个目录进行操作，避免出现混乱</p>
+<p>执行如下命令更新.bashrc</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;PATH=$(pwd):\$PATH&quot; &gt;&gt; ~/.bashrc # 当前处于android/bin中</span><br><span class="line">echo &quot;export REPO_URL=&#x27;https://mirrors.tuna.tsinghua.edu.cn/git/git-repo/&#x27;&quot; &gt;&gt; ~/.bashrc</span><br><span class="line">source ~/.bashrc</span><br></pre></td></tr></table></figure>
+<p>我们将当前目录加入PATH变量中，并设置了REPO_URL变量为清华大学的镜像源</p>
+<h2 id="下载monthly代码压缩包"><a href="#下载monthly代码压缩包" class="headerlink" title="下载monthly代码压缩包"></a>下载monthly代码压缩包</h2><p>由于国内网络环境打的原因，我们不能直接访问Google提供的AOSP代码仓库，只能通过国内的镜像进行访问，比如<a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/">清华源</a>，<a target="_blank" rel="noopener" href="https://mirrors.ustc.edu.cn/">中科大源</a>，<a target="_blank" rel="noopener" href="https://mirrors.cqu.edu.cn/#/">重大源</a>，<a target="_blank" rel="noopener" href="https://mirrors.cqupt.edu.cn/">重邮源</a>等。</p>
+<p>由于直接传输大量文件夹和文件的速度远低于直接诶传输一个完整的文件，所以镜像源给我们提供了一种更友好的方式，先下载一个打包好的压缩包，然后在解压后的压缩包基础上进行代码同步，这样就不需要传输大量的文件夹和文件了</p>
+<p>下载monthly压缩包：</p>
+<ol>
+<li>通过网页下载： <a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/aosp-monthly/">https://mirrors.tuna.tsinghua.edu.cn/aosp-monthly/</a></li>
+<li>通过wget下载： <a target="_blank" rel="noopener" href="https://mirrors.ustc.edu.cn/aosp-monthly/aosp-latest.tar">https://mirrors.ustc.edu.cn/aosp-monthly/aosp-latest.tar</a></li>
+</ol>
+<p>推荐使用wget方式，执行如下命令即可，由于每个月压缩包命名不同，所以镜像中还提供了一个aosp-latest.tar指向最新的一个压缩包，所以我们直接下载最新压缩包即可</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">wget -c https://mirrors.ustc.edu.cn/aosp-monthly/aosp-latest.tar</span><br><span class="line">wget -c https://mirrors.ustc.edu.cn/aosp-monthly/aosp-latest.tar.md5</span><br><span class="line"></span><br><span class="line">my_md5=$(md5sum aosp-latest.tar)</span><br><span class="line">md5=$(cat aosp-latest.tar.md5)</span><br><span class="line">if [ &quot;$&#123;my_md5:0:31&#125;&quot; != &quot;$&#123;md5:0:31&#125;&quot; ]; then</span><br><span class="line">    echo &quot;md5sum check failed, please try again.&quot;</span><br><span class="line">    exit 1</span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">tar -xvf aosp-latest.tar # aosp/.repo</span><br><span class="line">cd aosp/</span><br></pre></td></tr></table></figure>
+
+<p>wget -c表示我们需要断点续传，避免出现网络问题导致下载失败，我们不仅下载了代码压缩包，还下载了压缩包对应的md5文件，用于文件的完整性校验，当前最新的代码压缩包大小为84GB，所以完整性校验是必要的，再if判断中只判断了md5部分，后面的文件名部分则忽略掉。由于每个人的网络环境不同，所以需要的等待时间也不同，我下载代码压缩包花费了大概8个小时，另外如果你的网络是按流量计费的，请注意流量消耗。md5的计算大概需要十几分钟，压缩包解压则需要半个小时到一个小时。解压完成后我们进入aosp文件夹爱，准备开始进行代码同步</p>
+<h2 id="代码同步"><a href="#代码同步" class="headerlink" title="代码同步"></a>代码同步</h2><p>以下是进行代码同步的命令，通常情况下建议定期进行代码同步，避免在长时间不同步之后产生各种各样的问题</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">repo init -u https://aosp.tuna.tsinghua.edu.cn/platform/manifest -b android-15.0.0_r3</span><br><span class="line">repo sync -j4 </span><br></pre></td></tr></table></figure>
+<p>首先我们使用repo init指定我们需要的分支和代码仓库的地址，然后进行repo sync，由于镜像的限制，我们只使用4个线程进行同步，避免被封IP</p>
+<h2 id="构建代码"><a href="#构建代码" class="headerlink" title="构建代码"></a>构建代码</h2><p>读入环境设置</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">source build/envsetup.sh</span><br></pre></td></tr></table></figure>
+<p>查看可用产品版本</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">list_products</span><br><span class="line">list_releases [PRODUCT]</span><br><span class="line">list_variants [PRODUCT] [RELEASE]</span><br></pre></td></tr></table></figure>
+<p>以上三个命令必须在读入环境设置后执行，否则会找不到命令，这里产品版本列出命令和早期的命令不一样了，早期版本使用lunch命令即可直接查看产品版本，现在直接使用lunch则会提示你使用以上三个命令查看</p>
+<p>指定产品版本</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">lunch &lt;product&gt;-&lt;release&gt;-&lt;variant&gt;</span></span><br><span class="line">lunch sdk_phone64_x86_64-ap3a-eng</span><br></pre></td></tr></table></figure>
+<p>根据刚才查看的产品和版本呢，使用lunch命令指定我们需要构建的产品版本，我们选择编译一个x86_64的enginer版本</p>
+<p>开始构建</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make -j10</span><br></pre></td></tr></table></figure>
+<p>Intel i7-8750H有6个核共12线程，这里我使用了10个线程进行编译，最终经过4.5个小时完成了第一次构建，如果使用12线程的话可能还有下降空间，构建过程中可能会遇到大量Warning，但是这还不是我们需要关心的东西</p>
+<h2 id="启动模拟器"><a href="#启动模拟器" class="headerlink" title="启动模拟器"></a>启动模拟器</h2><p>使用如下命令启动我们编译好的模拟器</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">emulator</span><br></pre></td></tr></table></figure>
+<p><img src="/img/aosp_build/android15_emulator_screen_shoot.png" alt="模拟器界面" title="模拟器界面"></p>
+<p><img src="/img/aosp_build/android15_emulator_log.png" alt="模拟器日志" title="模拟器日志"></p>
+<h1 id="重新回到目录"><a href="#重新回到目录" class="headerlink" title="重新回到目录"></a>重新回到目录</h1><p>当我们完成工作后，退出工作目录，下次重新回到目录时需要做以下操作才能恢复工作环境上下文</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd android/bin/aosp</span><br><span class="line">source build/envsetup.sh</span><br><span class="line">lunch sdk_phone64_x86_64-ap3a-eng</span><br></pre></td></tr></table></figure>
+
+<h1 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h1><p>终于完成了AOSP的构建，还是比较顺利的，后续可能会进行一些代码调试和阅读的工作，更深入的理解Android系统，希望后期能够进行一些代码的定制和修改。我将以上命令整理成一个脚本并在github开源：<a target="_blank" rel="noopener" href="https://github.com/cqlhupt/AOSP-CHECKER/">AOSP CHECKER</a></p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>AOSP构建</p><p><a href="https://cqlhupt.github.io/2025/03/08/AOSP构建/">https://cqlhupt.github.io/2025/03/08/AOSP构建/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>作者</h6><p>John Tony</p></div></div><div class="level-item is-narrow"><div><h6>发布于</h6><p>2025-03-08</p></div></div><div class="level-item is-narrow"><div><h6>更新于</h6><p>2025-03-09</p></div></div><div class="level-item is-narrow"><div><h6>许可协议</h6><p><a class="icons" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="icon fab fa-creative-commons"></i></a><a class="icons" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="icon fab fa-creative-commons-by"></i></a><a class="icons" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="icon fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><!--!--></article></div><div class="card"><div class="card-content"><h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3><div class="buttons is-centered"><a class="button donate" data-type="alipay"><span class="icon is-small"><i class="fab fa-alipay"></i></span><span>支付宝</span><span class="qrcode"><img src="/img/alipay.jpg" alt="支付宝"></span></a><a class="button donate" data-type="wechat"><span class="icon is-small"><i class="fab fa-weixin"></i></span><span>微信</span><span class="qrcode"><img src="/img/wechatpay.png" alt="微信"></span></a></div></div></div><nav class="post-navigation mt-4 level is-mobile"><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2025/02/22/Java-JNI%E5%88%9D%E6%8E%A2/"><span class="level-item">Java JNI初探</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><div class="card"><div class="card-content"><h3 class="title is-5">评论</h3><script src="https://utteranc.es/client.js" repo="cqlhupt/cqlhupt.github.io" issue-term="pathname" label="some-issue-label" theme="github-light" crossorigin="anonymous" async></script></div></div></div><div class="column column-left is-4-tablet is-4-desktop is-4-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="/img/xuancailizi.jpg" alt="Jhon Tony"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">Jhon Tony</p><p class="is-size-6 is-block">Jhon Tony&#039;s Blog</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>Galaxy, Universe</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">文章</p><a href="/archives"><p class="title">20</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">分类</p><a href="/categories"><p class="title">0</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">标签</p><a href="/tags"><p class="title">0</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/cqlhupt" target="_blank" rel="noopener">关注我</a></div><div class="level is-mobile is-multiline"><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Github" href="https://github.com/cqlhupt"><i class="fab fa-github"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Facebook" href="https://facebook.com"><i class="fab fa-facebook"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Twitter" href="https://twitter.com"><i class="fab fa-twitter"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="Dribbble" href="https://dribbble.com"><i class="fab fa-dribbble"></i></a><a class="level-item button is-transparent is-marginless" target="_blank" rel="noopener" title="RSS" href="/"><i class="fas fa-rss"></i></a></div></div></div><!--!--><div class="card widget" data-type="links"><div class="card-content"><div class="menu"><h3 class="menu-label">链接</h3><ul class="menu-list"><li><a class="level is-mobile" href="https://hexo.io" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">Hexo</span></span><span class="level-right"><span class="level-item tag">hexo.io</span></span></a></li><li><a class="level is-mobile" href="https://bulma.io" target="_blank" rel="noopener"><span class="level-left"><span class="level-item">Bulma</span></span><span class="level-right"><span class="level-item tag">bulma.io</span></span></a></li></ul></div></div></div><!--!--><div class="card widget" data-type="recent-posts"><div class="card-content"><h3 class="menu-label">最新文章</h3><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-03-08T12:47:20.000Z">2025-03-08</time></p><p class="title"><a href="/2025/03/08/AOSP%E6%9E%84%E5%BB%BA/">AOSP构建</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-02-22T11:04:46.000Z">2025-02-22</time></p><p class="title"><a href="/2025/02/22/Java-JNI%E5%88%9D%E6%8E%A2/">Java JNI初探</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2025-01-04T11:27:13.000Z">2025-01-04</time></p><p class="title"><a href="/2025/01/04/Python%E5%90%91Windows%E7%AA%97%E5%8F%A3%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF/">Python向Windows窗口发送消息</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2024-12-22T05:31:57.000Z">2024-12-22</time></p><p class="title"><a href="/2024/12/22/FPGA-IO%E7%94%B5%E5%B9%B3%E9%85%8D%E7%BD%AE%E9%97%AE%E9%A2%98/">FPGA IO电平配置问题</a></p></div></article><article class="media"><div class="media-content"><p class="date"><time dateTime="2024-12-08T04:53:46.000Z">2024-12-08</time></p><p class="title"><a href="/2024/12/08/Android%E9%80%86%E5%90%91%E5%AE%9E%E8%B7%B5/">Android逆向实践</a></p></div></article></div></div><div class="card widget" data-type="archives"><div class="card-content"><div class="menu"><h3 class="menu-label">归档</h3><ul class="menu-list"><li><a class="level is-mobile" href="/archives/2025/03/"><span class="level-start"><span class="level-item">三月 2025</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2025/02/"><span class="level-start"><span class="level-item">二月 2025</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2025/01/"><span class="level-start"><span class="level-item">一月 2025</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/12/"><span class="level-start"><span class="level-item">十二月 2024</span></span><span class="level-end"><span class="level-item tag">2</span></span></a></li><li><a class="level is-mobile" href="/archives/2024/11/"><span class="level-start"><span class="level-item">十一月 2024</span></span><span class="level-end"><span class="level-item tag">11</span></span></a></li><li><a class="level is-mobile" href="/archives/2023/08/"><span class="level-start"><span class="level-item">八月 2023</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2022/08/"><span class="level-start"><span class="level-item">八月 2022</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2022/05/"><span class="level-start"><span class="level-item">五月 2022</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li><li><a class="level is-mobile" href="/archives/2022/04/"><span class="level-start"><span class="level-item">四月 2022</span></span><span class="level-end"><span class="level-item tag">1</span></span></a></li></ul></div></div></div><!--!--><div class="card widget" data-type="subscribe-email"><div class="card-content"><div class="menu"><h3 class="menu-label">订阅更新</h3><form action="https://feedburner.google.com/fb/a/mailverify" method="post" target="popupwindow" onsubmit="window.open(&#039;https://feedburner.google.com/fb/a/mailverify?uri=&#039;,&#039;popupwindow&#039;,&#039;scrollbars=yes,width=550,height=520&#039;);return true"><input type="hidden" value="" name="uri"><input type="hidden" name="loc" value="en_US"><div class="field has-addons"><div class="control has-icons-left is-expanded"><input class="input" name="email" type="email" placeholder="Email"><span class="icon is-small is-left"><i class="fas fa-envelope"></i></span></div><div class="control"><input class="button" type="submit" value="订阅"></div></div></form></div></div></div><div class="card widget" data-type="subscribe-email"><div class="card-content"><div class="menu"><h3 class="menu-label">follow.it</h3><form action="" method="post" target="_blank"><div class="field has-addons"><div class="control has-icons-left is-expanded"><input class="input" name="email" type="email" placeholder="Email"><span class="icon is-small is-left"><i class="fas fa-envelope"></i></span></div><div class="control"><input class="button" type="submit" value="订阅"></div></div></form></div></div></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/logo.svg" alt="Hexo" height="28"></a><p class="is-size-7"><span>&copy; 2025 John Tony</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a><br><span id="busuanzi_container_site_uv">共<span id="busuanzi_value_site_uv">0</span>个访客</span></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("zh-CN");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="回到顶端" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "此网站使用Cookie来改善您的体验。",
+          dismiss: "知道了！",
+          allow: "允许使用Cookie",
+          deny: "拒绝",
+          link: "了解更多",
+          policy: "Cookie政策",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.10.0/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.8.1/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/x-mathjax-config">MathJax.Hub.Config({
+            'HTML-CSS': {
+                matchFontHeight: false
+            },
+            SVG: {
+                matchFontHeight: false
+            },
+            CommonHTML: {
+                matchFontHeight: false
+            },
+            tex2jax: {
+                inlineMath: [
+                    ['$','$'],
+                    ['\\(','\\)']
+                ]
+            }
+        });</script><script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="想要查找什么..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"想要查找什么...","untitled":"(无标题)","posts":"文章","pages":"页面","categories":"分类","tags":"标签"});
+        });</script></body></html>
