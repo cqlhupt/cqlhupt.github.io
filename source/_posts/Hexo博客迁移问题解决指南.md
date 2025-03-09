@@ -17,6 +17,7 @@ tags:
   * git timeout fatal
   * icarus主题打开Latex支持
   * 直接从其他计算机复制博客文件夹
+  * 密钥问题
 * 结语
 
 # 可迁移Hexo
@@ -196,6 +197,31 @@ To add an exception for this directory, call:
 ![修改文件夹所有者2](/img/hexo_mig/change_owner_of_dictory2.png "修改文件夹所有者2")
 
 根据以上两张图中的步骤修改你的博客文件夹所有者，注意第9步中的选框是在第8步结束后才会出现的，并且第9和第10步必须选上才能生效
+
+## 密钥问题
+当我们将文件夹复制到另一台曾经使用SSH访问过GitHub的电脑时可能会遇到以下问题：
+```shell
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+IT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY!
+Someone could be eavesdropping on you right now (man-in-the-middle attack)!
+It is also possible that a host key has just been changed.
+The fingerprint for the RSA key sent by the remote host is
+SHA256:uNiVztksCsDhcc0u9e8BujQXVUpKZIDTMczCvj3tD2s.
+Please contact your system administrator.
+Add correct host key in /c/Users/LH/.ssh/known_hosts to get rid of this message.
+Offending RSA key in /c/Users/LH/.ssh/known_hosts:3
+RSA host key for github.com has changed and you have requested strict checking.
+Host key verification failed.
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+```
+这是由于我们的known_hosts文件中记录存在问题，需要将其删除，然后重新尝试连接即可，使用如下命令删除：
+```shell
+ssh-keygen -R github.com
+```
 
 # 结语
 保持更新确实是一件很困难的事情，尤其是更新这件事本身对于自己可有可无的时候，毕竟人类的本质是鸽子和复读机。希望以后能够按时更新，记录自己的成长和生活。
